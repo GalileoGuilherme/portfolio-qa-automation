@@ -4,66 +4,101 @@
 <head>
   <meta charset="utf-8">
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
-    .container { max-width: 650px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-    .header { background: #1a202c; color: #ffffff; padding: 25px; text-align: center; }
-    .header h1 { margin: 0; font-size: 1.4rem; font-weight: 600; }
-    .header p { margin: 6px 0 0 0; color: #a0aec0; font-size: 0.85rem; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f7fafc; margin: 0; padding: 20px; }
+    .container { max-width: 650px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
+    .header { background: #e53e3e; color: #ffffff; padding: 25px; text-align: center; }
+    .header h1 { margin: 0; font-size: 1.3rem; font-weight: 700; }
+    .header p { margin: 6px 0 0 0; color: #f7fafc; font-size: 0.88rem; opacity: 0.9; }
     .content { padding: 25px; color: #2d3748; line-height: 1.6; }
-    .badge-success { background: #c6f6d5; color: #22543d; padding: 4px 10px; border-radius: 9999px; font-weight: bold; font-size: 0.8rem; display: inline-block; }
-    .badge-alert { background: #fed7d7; color: #742a2a; padding: 4px 10px; border-radius: 9999px; font-weight: bold; font-size: 0.8rem; display: inline-block; }
-    .card { background: #f7fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 15px; margin: 15px 0; }
-    .code-box { background: #2d3748; color: #e2e8f0; padding: 12px; border-radius: 4px; font-family: monospace; font-size: 0.82rem; overflow-x: auto; }
-    .footer { background: #f7fafc; padding: 15px; text-align: center; font-size: 0.78rem; color: #718096; border-top: 1px solid #e2e8f0; }
+    .badge { background: #fed7d7; color: #742a2a; padding: 6px 14px; border-radius: 9999px; font-weight: bold; font-size: 0.85rem; display: inline-block; }
+    .stats-card { background: #f7fafc; border: 1px solid #edf2f7; border-radius: 6px; padding: 15px; margin: 15px 0; }
+    .insights-card { background: #ffffff; border-left: 4px solid #e53e3e; padding: 15px; margin: 20px 0; border-top: 1px solid #edf2f7; border-right: 1px solid #edf2f7; border-bottom: 1px solid #edf2f7; border-radius: 0 6px 6px 0; }
+    .footer { background: #f7fafc; padding: 16px; text-align: center; font-size: 0.78rem; color: #718096; border-top: 1px solid #edf2f7; }
+    pre { background: #2d3748; color: #edf2f7; padding: 12px; border-radius: 5px; font-size: 0.82rem; overflow-x: auto; }
+    code { font-family: monospace; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>🤖 AI QA Observer & E2E Insights</h1>
-      <p>Portfólio Web (portfolio-omega-six-18.vercel.app)</p>
+      <h1>🚨 Alerta: Falha Detectada nos Testes E2E</h1>
+      <p>Portfólio Web • Galileo Guilherme</p>
     </div>
 
     <div class="content">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <span class="badge-success">✔ 35 Testes Automatizados</span>
-        <span class="badge-alert">⚠ Auditoria de Responsividade Visual</span>
+      <div style="text-align: center; margin-bottom: 20px;">
+        <span class="badge">
+          ❌ 12 Falha(s) Detectada(s)
+        </span>
       </div>
 
-      <p>Olá, <strong>Galileo Guilherme</strong>!</p>
-      <p>A suíte de testes E2E do Cypress concluiu a validação contínua da sua aplicação. A IA Observadora consolidou as seguintes métricas e recomendações:</p>
-
-      <div class="card">
-        <h3 style="margin-top: 0; color: #2b6cb0;">🧠 Análise & Diagnóstico da IA</h3>
-        <div style="white-space: pre-wrap; font-size: 0.9rem;">
-### 🔍 Diagnóstico Automatizado de UI/UX & Código:
-1. **Esmagamento de Labels e Botões (.qa-credential-row)**:
-   - Em viewports mobile (<= 480px), containers com `display: flex` sem `flex-wrap` causam quebra anômala de palavras curtas ("E-mail" -> "E-\nmail").
-   - *Correção*: Aplicar `flex-direction: column` e `white-space: nowrap` no breakpoint mobile.
-
-2. **Espaçamento Textual Colado**:
-   - Falta de espaço delimitador em nós inline React: "CASO 1 · CENÁRIOLogin" e "EndereçoPendente".
-   - *Correção*: Adicionar `margin-right: 0.5rem` nas badges ou utilizar layout `display: flex; justify-content: space-between`.
-
-3. **Sobreposição do Header Mobile**:
-   - Cabeçalho `position: fixed` necessita de compensação de `padding-top: calc(4rem + 12px)` no container de conteúdo principal.
-  </div>
+      <div class="stats-card">
+        <h4 style="margin: 0 0 10px 0; color: #4a5568;">📊 Métricas de Execução:</h4>
+        <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
+          <li><strong>Total de Cenários Avaliados:</strong> 35</li>
+          <li><strong>Testes com Sucesso:</strong> <span style="color: #38a169; font-weight: bold;">33</span></li>
+          <li><strong>Falhas Encontradas:</strong> <span style="color: #e53e3e; font-weight: bold;">12</span></li>
+          <li><strong>Capturas de Tela Arquivadas:</strong> 12</li>
+        </ul>
       </div>
 
-      <div class="card">
-        <h3 style="margin-top: 0; color: #b7791f;">📸 Evidências & Auditoria Visual</h3>
-        <p style="font-size: 0.88rem; margin: 0 0 10px 0;">Evidências de colisão visual detectadas: <strong>12 capturas</strong>.</p>
-        <p style="font-size: 0.82rem; color: #718096;">Os arquivos de evidência completos foram arquivados na pipeline do GitHub Actions.</p>
+      <div class="insights-card">
+        <h3 style="margin-top: 0; color: #c53030;">
+          🤖 Diagnóstico da IA & Solução Recomendada:
+        </h3>
+        <div style="font-size: 0.92rem; white-space: pre-wrap;">
+### 🚨 Diagnóstico de Falha (Ação Imediata Necessária)
+
+1. **O que quebrou:**
+   - Auditoria de Responsividade Visual detectou esmagamento de elementos em telas móveis e/ou colisão com o cabeçalho fixo.
+   - Foram identificados textos inline colados sem espaçamento delimitador (`CENÁRIOLogin` e `EndereçoPendente`).
+
+2. **Causa Raiz Técnica:**
+   - Em `.qa-credential-row`, o layout Flexbox sem `flex-wrap: wrap` ou sem `flex-direction: column` comprime o `<strong>`, forçando quebras anômalas em palavras curtas.
+   - Em nós React inline, a ausência de espaço no texto JSX (`CASO {i} · CENÁRIO{title}`) funde as palavras adjacentes.
+
+---
+
+### 🤖 PROMPT PRONTO PARA IA DE CÓDIGO (COPIE E COLE NO CHAT DO PROJETO PORTFOLIO):
+```text
+Atue como Desenvolvedor Front-end Sênior. Nosso sistema de testes automatizados E2E Cypress detectou anomalias visuais no portfólio. Aplique as correções abaixo:
+
+1. No CSS da página de automação/loja:
+Adicione uma media query para telas <= 480px em .qa-credential-row aplicando flex-direction: column, gap: 0.6rem e white-space: nowrap no elemento <strong> para impedir a quebra de 'E-mail' e 'Senha'.
+
+2. No componente de modal de Casos BDD e no Checkout:
+Separe os nós inline que estão colados: adicione margin-right: 0.5rem no badge 'CENÁRIO' antes do título, e adicione espaçamento entre o label 'Endereço' e o badge 'Pendente'.
+
+3. No CSS global/App.css:
+Em telas <= 768px, adicione padding-top: calc(4.5rem + 10px) no container principal para compensar a altura do .mobile-header fixo.
+```
+
+---
+
+3. **Código de Correção Direto:**
+```css
+/* Correção no CSS do Portfólio (Mobile <= 480px) */
+@media (max-width: 480px) {
+  .qa-credential-row {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.6rem !important;
+  }
+  .qa-credential-row strong {
+    white-space: nowrap !important;
+  }
+}
+```
+    </div>
       </div>
 
-      <p style="font-size: 0.85rem; color: #4a5568;">
-        Para rodar novamente todos os testes no navegador:<br>
-        <code>npm run test:browser:all</code>
+      <p style="font-size: 0.85rem; color: #718096;">
+        Este e-mail foi disparado automaticamente pelo pipeline de CI/CD do Cypress.
       </p>
     </div>
 
     <div class="footer">
-      Relatório gerado automaticamente por <strong>Antigravity AI Test Observer</strong> em 30/10/2026, 02:01:41
+      Antigravity AI Test Observer • Executado em 30/10/2026, 02:45:30
     </div>
   </div>
 </body>
