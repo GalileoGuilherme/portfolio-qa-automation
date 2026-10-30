@@ -176,126 +176,69 @@ Cypress.Commands.add('auditPageAccessibility', () => {
   }
 }
 
-// Helper da API Gemini com consulta dinâmica aos modelos disponíveis da chave
+// Helper da API Gemini: chamada direta ao modelo oficial gemini-1.5-flash com fallback pro
 async function callGeminiAPI(apiKey, promptText) {
-  // 1. Tenta listar os modelos disponíveis para esta API Key específica
-  console.log("🔍 Consultando lista de modelos disponíveis para esta chave de API...");
-  let availableModel = null;
-  let apiVersion = "v1beta";
-
-  try {
-    const listResult = await new Promise((resolve) => {
-      const options = {
-        hostname: "generativelanguage.googleapis.com",
-        path: `/v1beta/models?key=${apiKey}`,
-        method: "GET",
-        timeout: 10000,
-      };
-      const req = https.request(options, (res) => {
-        let body = "";
-        res.on("data", (c) => (body += c));
-        res.on("end", () => {
-          try {
-            resolve(JSON.parse(body));
-          } catch (e) {
-            resolve(null);
-          }
-        });
-      });
-      req.on("error", () => resolve(null));
-      req.on("timeout", () => { req.destroy(); resolve(null); });
-      req.end();
-    });
-
-    if (listResult && listResult.models && Array.isArray(listResult.models)) {
-      // Filtra modelos que suportam o método generateContent
-      const generateModels = listResult.models
-        .filter((m) => m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent"))
-        .map((m) => m.name.replace(/^models\//, ""));
-
-      console.log("📋 Modelos suportados pela sua chave:", generateModels);
-
-      // Prioriza flash ou o primeiro disponível
-      availableModel = generateModels.find((m) => m.includes("flash")) ||
-                       generateModels.find((m) => m.includes("pro")) ||
-                       generateModels[0];
+  const models = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-1.0-pro"];
+  const postData = JSON.stringify({
+    contents: [{ parts: [{ text: promptText }] }],
+    generationConfig: {
+      temperature: 0.7,
+      maxOutputTokens: 1000,
     }
-  } catch (e) {
-    console.warn("⚠️ Não foi possível listar modelos dinamicamente, usando fallback:", e.message);
-  }
+  });
 
-  // Lista de fallback caso a listagem não responda
-  const targets = availableModel
-    ? [{ version: apiVersion, model: availableModel }]
-    : [
-        { version: "v1beta", model: "gemini-1.5-flash" },
-        { version: "v1", model: "gemini-1.5-flash" },
-        { version: "v1beta", model: "gemini-1.5-pro" },
-        { version: "v1", model: "gemini-1.5-pro" },
-      ];
+  for (const model of models) {
+    try {
+      console.log(`🤖 Tentando gerar insights com o modelo: ${model}...`);
+      const text = await new Promise((resolve, reject) => {
+        const options = {
+          hostname: "generativelanguage.googleapis.com",
+          path: `/v1beta/models/${model}:generateContent?key=${apiKey}`,
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Content-Length": Buffer.byteLength(postData)
+          },
+          timeout: 25000,
+        };
 
-  console.log(`🤖 Modelo selecionado para geração: ${targets[0].model} (${targets[0].version})`);
-
-  function tryTarget(index) {
-    return new Promise((resolve, reject) => {
-      const target = targets[index];
-      const postData = JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] });
-      const options = {
-        hostname: "generativelanguage.googleapis.com",
-        path: `/${target.version}/models/${target.model}:generateContent?key=${apiKey}`,
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Content-Length": Buffer.byteLength(postData)
-        },
-        timeout: 25000,
-      };
-
-      const req = https.request(options, (res) => {
-        let body = "";
-        res.on("data", (chunk) => (body += chunk));
-        res.on("end", () => {
-          try {
-            const data = JSON.parse(body);
-            if (res.statusCode >= 200 && res.statusCode < 300) {
-              const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-              if (text) {
-                console.log(`✅ Sucesso na geração de conteúdo com ${target.model}!`);
-                return resolve(text);
+        const req = https.request(options, (res) => {
+          let body = "";
+          res.on("data", (chunk) => (body += chunk));
+          res.on("end", () => {
+            try {
+              const data = JSON.parse(body);
+              if (res.statusCode >= 200 && res.statusCode < 300) {
+                const answer = data.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (answer) return resolve(answer);
+                return reject(new Error("Resposta vazia da API do Gemini"));
               }
-              return reject(new Error("Resposta vazia da API."));
+              const msg = data.error?.message || `HTTP ${res.statusCode}`;
+              reject(new Error(`[${model}] ${msg}`));
+            } catch (err) {
+              reject(new Error(`Erro ao interpretar resposta: ${err.message}`));
             }
-
-            const errorMsg = data.error?.message || `HTTP ${res.statusCode}`;
-            console.warn(`⚠️ Erro com ${target.model}: ${errorMsg}`);
-
-            if (index + 1 < targets.length) {
-              return resolve(tryTarget(index + 1));
-            }
-
-            reject(new Error(errorMsg));
-          } catch (e) {
-            reject(new Error(`Falha no parse: ${e.message}`));
-          }
+          });
         });
+
+        req.on("error", reject);
+        req.on("timeout", () => {
+          req.destroy();
+          reject(new Error("Timeout de 25s com a Gemini API"));
+        });
+
+        req.write(postData);
+        req.end();
       });
 
-      req.on("error", (err) => {
-        if (index + 1 < targets.length) return resolve(tryTarget(index + 1));
-        reject(err);
-      });
-
-      req.on("timeout", () => {
-        req.destroy();
-        reject(new Error("Timeout de 25s com a Gemini API."));
-      });
-
-      req.write(postData);
-      req.end();
-    });
+      console.log(`✨ Insights gerados com sucesso pelo ${model}!`);
+      return text;
+    } catch (err) {
+      console.warn(`⚠️ Modelo ${model} falhou:`, err.message);
+    }
   }
 
-  return tryTarget(0);
+  throw new Error("Nenhum modelo Gemini respondeu com sucesso.");
 }
 
 // 5. Motor HTML de Alto Padrão (Painel Executivo)
