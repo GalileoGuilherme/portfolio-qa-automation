@@ -13,6 +13,10 @@ module.exports = defineConfig({
       runMode: 2, // Resiliência em pipelines de CI contra flaky tests
       openMode: 0,
     },
+    reporter: "json",
+    reporterOptions: {
+      output: "cypress/reports/cypress-results.json",
+    },
     experimentalRunAllSpecs: true, // Habilita o botão 'Run all specs' no Cypress UI
     setupNodeEvents(on, config) {
       // Implementação de event listeners do Cypress caso necessário
