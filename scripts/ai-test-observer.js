@@ -221,12 +221,46 @@ async function main() {
 
   console.log(`📧 Conectando ao servidor SMTP (${smtpHost}) para envio a ${targetEmail}...`);
 
-  const transporter = nodemailer.createTransport({
-    host: smtpHost,
-    port: 587,
-    secure: false,
+  // Detecta automaticamente o serviço ou host apropriado
+  const isGmail = smtpUser.includes("@gmail.com");
+  const isOutlook = smtpUser.includes("@outlook.") || smtpUser.includes("@hotmail.") || smtpUser.includes("@live.");
+
+  const transportConfig = {
     auth: { user: smtpUser, pass: smtpPass },
+    tls: {
+      ciphers: "SSLv3",
+      rejectUnauthorized: false,
+    },
+  };
+
+  if (isGmail) {
+    transportConfig.service = "gmail";
+  } else if (isOutlook) {
+    transportConfig.host = "smtp-mail.outlook.com"; // Host mais resiliente para contas pessoais da Microsoft
+    transportConfig.port = 587;
+    transportConfig.secure = false;
+  } else {
+    transportConfig.host = smtpHost;
+    transportConfig.port = parseInt(process.env.SMTP_PORT || "587", 10);
+    transportConfig.secure = transportConfig.port === 465;
+  }
+
+  console.log("⚙️ Configuração de transporte SMTP:", {
+    service: transportConfig.service || "custom",
+    host: transportConfig.host || "auto",
+    port: transportConfig.port || 587,
+    user: smtpUser,
   });
+
+  const transporter = nodemailer.createTransport(transportConfig);
+
+  try {
+    await transporter.verify();
+    console.log("✅ Conexão SMTP autenticada com sucesso!");
+  } catch (verifyErr) {
+    console.error("❌ Falha na autenticação SMTP:", verifyErr.message);
+    throw verifyErr;
+  }
 
   const info = await transporter.sendMail({
     from: `"Antigravity AI QA Observer" <${smtpUser}>`,
