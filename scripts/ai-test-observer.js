@@ -175,23 +175,25 @@ Cypress.Commands.add('auditPageAccessibility', () => {
   }
 }
 
-// Helper da API Gemini com suporte a múltiplos modelos e tratamento de erro detalhado
+// Helper da API Gemini com suporte aos endpoints v1 e v1beta e modelos oficiais ativos
 function callGeminiAPI(apiKey, promptText) {
-  // Lista de modelos suportados em ordem de preferência
-  const models = [
-    "gemini-1.5-flash",
-    "gemini-1.5-flash-latest",
-    "gemini-1.5-pro",
-    "gemini-pro"
+  // Apenas modelos oficiais ativos suportados para generateContent
+  const targets = [
+    { version: "v1beta", model: "gemini-1.5-flash-8b" },
+    { version: "v1beta", model: "gemini-1.5-flash" },
+    { version: "v1", model: "gemini-1.5-flash" },
+    { version: "v1beta", model: "gemini-1.5-pro" },
+    { version: "v1", model: "gemini-1.5-pro" },
+    { version: "v1beta", model: "gemini-2.0-flash-exp" }
   ];
 
-  function tryModel(modelIndex) {
+  function tryTarget(index) {
     return new Promise((resolve, reject) => {
-      const model = models[modelIndex];
+      const target = targets[index];
       const postData = JSON.stringify({ contents: [{ parts: [{ text: promptText }] }] });
       const options = {
         hostname: "generativelanguage.googleapis.com",
-        path: `/v1beta/models/${model}:generateContent?key=${apiKey}`,
+        path: `/${target.version}/models/${target.model}:generateContent?key=${apiKey}`,
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -208,37 +210,40 @@ function callGeminiAPI(apiKey, promptText) {
             const data = JSON.parse(body);
             if (res.statusCode >= 200 && res.statusCode < 300) {
               const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-              if (text) return resolve(text);
+              if (text) {
+                console.log(`✅ Gemini respondeu com sucesso usando ${target.model} (${target.version})!`);
+                return resolve(text);
+              }
               return reject(new Error("Resposta vazia da IA Gemini."));
             }
 
             const errorMsg = data.error?.message || `HTTP ${res.statusCode}`;
-            console.warn(`⚠️ Modelo ${model} retornou erro (${res.statusCode}): ${errorMsg}`);
+            console.warn(`⚠️ Target ${target.model} (${target.version}) retornou erro (${res.statusCode}): ${errorMsg}`);
 
-            // Se for erro 404 (modelo descontinuado/não encontrado), tenta o próximo modelo
-            if ((res.statusCode === 404 || res.statusCode === 400) && modelIndex + 1 < models.length) {
-              console.log(`🔄 Tentando modelo alternativo: ${models[modelIndex + 1]}...`);
-              return resolve(tryModel(modelIndex + 1));
+            // Se o modelo não existir (404) ou der erro de requisição (400), tenta o próximo alvo
+            if ((res.statusCode === 404 || res.statusCode === 400) && index + 1 < targets.length) {
+              console.log(`🔄 Tentando modelo alternativo: ${targets[index + 1].model} (${targets[index + 1].version})...`);
+              return resolve(tryTarget(index + 1));
             }
 
             reject(new Error(`Erro Google Gemini API (${res.statusCode}): ${errorMsg}`));
           } catch (e) {
-            reject(new Error(`Falha ao processar resposta JSON: ${e.message} (Raw: ${body.slice(0, 150)})`));
+            reject(new Error(`Falha ao processar resposta JSON: ${e.message}`));
           }
         });
       });
 
       req.on("error", (err) => {
-        if (modelIndex + 1 < models.length) {
-          console.log(`🔄 Erro de conexão com ${model}. Tentando ${models[modelIndex + 1]}...`);
-          return resolve(tryModel(modelIndex + 1));
+        if (index + 1 < targets.length) {
+          console.log(`🔄 Erro de rede com ${target.model}. Tentando próximo...`);
+          return resolve(tryTarget(index + 1));
         }
         reject(err);
       });
 
       req.on("timeout", () => {
         req.destroy();
-        reject(new Error("Timeout de 20s ao aguardar resposta da Gemini API."));
+        reject(new Error("Timeout ao aguardar resposta da Gemini API."));
       });
 
       req.write(postData);
@@ -246,7 +251,7 @@ function callGeminiAPI(apiKey, promptText) {
     });
   }
 
-  return tryModel(0);
+  return tryTarget(0);
 }
 
 // 5. Motor HTML de Alto Padrão (Painel Executivo)
