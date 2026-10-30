@@ -1,0 +1,32 @@
+{
+  "name": "cd-portfolio-e2e",
+  "version": "1.0.0",
+  "description": "E2E Test Automation Suite with Cypress for Galileo Guilherme's Portfolio",
+  "main": "index.js",
+  "scripts": {
+    "cypress:open": "node scripts/cypress-runner.js open",
+    "cypress:run": "node scripts/cypress-runner.js run",
+    "cypress:run:chrome": "node scripts/cypress-runner.js run --browser chrome --headless",
+    "test": "npm run cypress:run",
+    "test:browser": "node scripts/cypress-runner.js run --headed --browser chrome",
+    "test:browser:all": "node scripts/cypress-runner.js run --headed --browser chrome --spec \"cypress/e2e/all-tests.cy.js\"",
+    "test:open": "node scripts/cypress-runner.js open --browser chrome",
+    "report:ai": "node scripts/ai-test-observer.js",
+    "test:full": "npm test ; npm run report:ai"
+  },
+  "keywords": [
+    "cypress",
+    "e2e",
+    "qa",
+    "automation",
+    "portfolio",
+    "github-actions"
+  ],
+  "author": "Galileo Guilherme",
+  "license": "MIT",
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "cypress": "^13.17.0",
+    "nodemailer": "^10.3.1"
+  }
+}

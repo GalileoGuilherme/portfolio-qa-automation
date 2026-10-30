@@ -1,0 +1,97 @@
+name: Cypress E2E Multi-Environment Suite
+
+on:
+  # Disparos diretos neste repositório de testes nas branches main e dev
+  push:
+    branches: [main, master, dev, develop]
+  pull_request:
+    branches: [main, master, dev, develop]
+
+  # Disparo remoto disparado pelo repositório da aplicação (https://github.com/GalileoGuilherme/portfolio)
+  # acionado após cada commit ou deploy na Vercel (main ou dev)
+  repository_dispatch:
+    types: [portfolio_deploy, portfolio_commit]
+
+  # Disparo manual no painel Actions com seleção de ambiente e branch
+  workflow_dispatch:
+    inputs:
+      target_env:
+        description: "Ambiente de Testes"
+        required: true
+        default: "production"
+        type: choice
+        options:
+          - "production"
+          - "dev"
+      custom_url:
+        description: "URL personalizada de deploy (opcional)"
+        required: false
+        default: ""
+
+jobs:
+  cypress-run:
+    name: E2E Full Regression (${{ github.ref_name || 'dispatch' }})
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout E2E Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Determine Target Base URL
+        id: set-url
+        run: |
+          # 1. Se veio por repository_dispatch com deploy_url customizada
+          if [ -n "${{ github.event.client_payload.deploy_url }}" ]; then
+            echo "BASE_URL=${{ github.event.client_payload.deploy_url }}" >> $GITHUB_OUTPUT
+          # 2. Se acionado manualmente com custom_url preenchida
+          elif [ -n "${{ github.event.inputs.custom_url }}" ]; then
+            echo "BASE_URL=${{ github.event.inputs.custom_url }}" >> $GITHUB_OUTPUT
+          # 3. Padrão de produção
+          else
+            echo "BASE_URL=https://portfolio-omega-six-18.vercel.app" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run Cypress E2E Tests (Chrome Headless)
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          headless: true
+        env:
+          CYPRESS_BASE_URL: ${{ steps.set-url.outputs.BASE_URL }}
+
+      - name: Upload Test Artifacts on Failure
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-evidences
+          path: |
+            cypress/screenshots
+            cypress/videos
+          retention-days: 14
+
+      - name: AI Test Observer & Automated Email Report
+        if: always()
+        run: node scripts/ai-test-observer.js
+        env:
+          SMTP_HOST: ${{ secrets.SMTP_HOST || 'smtp.office365.com' }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO || 'galileoguilherme@outlook.com' }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      - name: Upload AI HTML Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ai-qa-executive-report
+          path: cypress/reports/ai-report-latest.html
+          retention-days: 14

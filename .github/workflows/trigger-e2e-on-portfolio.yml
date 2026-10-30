@@ -1,0 +1,34 @@
+# ==============================================================================
+# WORKFLOW MODELO PARA O REPOSITÓRIO DA APLICAÇÃO:
+# https://github.com/GalileoGuilherme/portfolio
+#
+# Salve este arquivo em: .github/workflows/e2e-trigger.yml no repositório portfolio
+# ==============================================================================
+
+name: Trigger Cypress E2E Suite on Commit / Deploy
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  notify-cypress:
+    name: Notify E2E CI/CD Repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger E2E Test Workflow
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          # Token pessoal (PAT) com permissão 'repo' no repositório ci-cd-portf-lio-cypress
+          token: ${{ secrets.E2E_DISPATCH_TOKEN }}
+          repository: GalileoGuilherme/ci-cd-portf-lio-cypress
+          event-type: portfolio_commit
+          client-payload: >
+            {
+              "branch": "${{ github.ref_name }}",
+              "commit": "${{ github.sha }}",
+              "deploy_url": "${{ github.ref_name == 'main' && 'https://portfolio-omega-six-18.vercel.app' || 'https://portfolio-omega-six-18.vercel.app' }}"
+            }
