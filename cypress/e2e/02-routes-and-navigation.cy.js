@@ -4,6 +4,7 @@ describe("02 - Navegação e Integridade das Rotas da SPA", () => {
     { label: "Mobile", width: 375, height: 812 },
   ];
 
+
   const routes = [
     { path: "/about", name: "Sobre / Experiência" },
     { path: "/portfolio", name: "Portfólio / Projetos" },
