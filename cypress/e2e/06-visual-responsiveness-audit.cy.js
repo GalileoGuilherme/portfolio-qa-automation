@@ -34,12 +34,27 @@ describe("06 - Auditoria Avançada de Responsividade (Sobreposições e Esmagame
         cy.checkResponsiveRowSpacing(".qa-login-label-row");
       });
 
-      it("Deve auditar que títulos centrais em todas as rotas não colidam com o cabeçalho móvel", () => {
-        const pages = ["/about", "/contact", "/curriculum", "/portfolio"];
+      it("Deve auditar que títulos centrais nas rotas de conteúdo não colidam com o cabeçalho móvel", () => {
+        // Rotas com conteúdo textual e títulos (h1, h2)
+        const pages = ["/about", "/contact", "/portfolio"];
         pages.forEach((page) => {
           cy.visit(page);
           cy.checkHeaderOcclusion(".mobile-header", "h1, h2");
         });
+      });
+
+      it("Deve validar que a rota /curriculum possui botão funcional para baixar o PDF", () => {
+        cy.visit("/curriculum");
+
+        // O botão de download deve existir com o atributo de download direto e link do PDF
+        cy.get('a.curriculum-btn, a[href*=".pdf"]')
+          .should("exist")
+          .and("have.attr", "download")
+          .then(() => {
+            cy.get('a.curriculum-btn, a[href*=".pdf"]')
+              .should("have.attr", "href")
+              .and("include", ".pdf");
+          });
       });
     });
   });
