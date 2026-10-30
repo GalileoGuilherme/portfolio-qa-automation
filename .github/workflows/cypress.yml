@@ -1,18 +1,14 @@
 name: Cypress E2E Multi-Environment Suite
 
 on:
-  # Disparos diretos neste repositório de testes nas branches main e dev
   push:
     branches: [main, master, dev, develop]
   pull_request:
     branches: [main, master, dev, develop]
 
-  # Disparo remoto disparado pelo repositório da aplicação (https://github.com/GalileoGuilherme/portfolio)
-  # acionado após cada commit ou deploy na Vercel (main ou dev)
   repository_dispatch:
     types: [portfolio_deploy, portfolio_commit]
     
-  # Disparo manual no painel Actions com seleção de ambiente e branch
   workflow_dispatch:
     inputs:
       target_env:
@@ -41,30 +37,23 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: "npm"
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install
 
       - name: Determine Target Base URL
         id: set-url
         run: |
-          # 1. Se veio por repository_dispatch com deploy_url customizada
           if [ -n "${{ github.event.client_payload.deploy_url }}" ]; then
             echo "BASE_URL=${{ github.event.client_payload.deploy_url }}" >> $GITHUB_OUTPUT
-          # 2. Se acionado manualmente com custom_url preenchida
           elif [ -n "${{ github.event.inputs.custom_url }}" ]; then
             echo "BASE_URL=${{ github.event.inputs.custom_url }}" >> $GITHUB_OUTPUT
-          # 3. Padrão de produção
           else
             echo "BASE_URL=https://portfolio-omega-six-18.vercel.app" >> $GITHUB_OUTPUT
           fi
 
       - name: Run Cypress E2E Tests (Chrome Headless)
-        uses: cypress-io/github-action@v6
-        with:
-          browser: chrome
-          headless: true
+        run: npm run cypress:run:chrome
         env:
           CYPRESS_BASE_URL: ${{ steps.set-url.outputs.BASE_URL }}
 
