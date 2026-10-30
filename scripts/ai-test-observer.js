@@ -89,12 +89,13 @@ Você é um Engenheiro de QA Sênior e Especialista em Front-end.
 A bateria de testes E2E do portfólio web (https://portfolio-omega-six-18.vercel.app/) FALHOU.
 Evidências detectadas:
 - ${metrics.totalScreenshots} screenshots de falhas capturadas pelo Cypress.
-- Erros comuns conhecidos: Responsividade mobile <= 480px em .qa-credential-row, textos colados (CENÁRIOLogin, EndereçoPendente), sobreposição do header.
 
 Gere em Markdown estruturado:
 1. 🚨 O que quebrou e impacto no usuário
 2. 🔬 Análise da Causa Raiz Técnica (CSS / JSX)
-3. 🛠️ Solução exata com código pronto para copiar e colar
+3. 🤖 PROMPT PRONTO PARA IA DE CÓDIGO (Copiar e colar diretamente no Claude / ChatGPT / Cursor / Antigravity do projeto portfolio para aplicar o fix automaticamente):
+Crie um bloco de prompt delimitado e completo que instrua a IA do projeto portfolio a localizar os arquivos exatos e aplicar o patch sem intervenção manual.
+4. 🛠️ Script / Código de correção (CSS e JSX)
         `
         : `
 Você é um Especialista Sênior em Qualidade de Software, Arquitetura e UX.
@@ -102,8 +103,9 @@ A bateria de testes E2E do portfólio web (https://portfolio-omega-six-18.vercel
 
 Como todos os testes passaram, gere em Markdown:
 1. 🏆 Reconhecimento da estabilidade da versão atual
-2. 🚀 3 Sugestões de Melhorias Avançadas para o Portfólio (ex: Performance Web Vitals, Acessibilidade WCAG 2.1 AA, Testes de Carga com k6 ou PWA)
-3. 💡 Próximos passos recomendados para o roadmap de testes
+2. 🚀 3 Sugestões de Melhorias Avançadas para o Portfólio (Performance k6, A11y WCAG 2.1 AA, Otimizações)
+3. 🤖 PROMPT PRONTO PARA IA DE CÓDIGO (Copiar e colar no projeto portfolio para implementar essas melhorias via IA automaticamente):
+Forneça um prompt pronto e estruturado para o agente de IA aplicar as melhorias sugeridas no código do portfólio.
         `;
 
       const responseText = await callGeminiAPI(apiKey, prompt);
@@ -126,7 +128,25 @@ Como todos os testes passaram, gere em Markdown:
    - Em \`.qa-credential-row\`, o layout Flexbox sem \`flex-wrap: wrap\` ou sem \`flex-direction: column\` comprime o \`<strong>\`, forçando quebras anômalas em palavras curtas.
    - Em nós React inline, a ausência de espaço no texto JSX (\`CASO {i} · CENÁRIO{title}\`) funde as palavras adjacentes.
 
-3. **Código de Correção Sugerido:**
+---
+
+### 🤖 PROMPT PRONTO PARA IA DE CÓDIGO (COPIE E COLE NO CHAT DO PROJETO PORTFOLIO):
+\`\`\`text
+Atue como Desenvolvedor Front-end Sênior. Nosso sistema de testes automatizados E2E Cypress detectou anomalias visuais no portfólio. Aplique as correções abaixo:
+
+1. No CSS da página de automação/loja:
+Adicione uma media query para telas <= 480px em .qa-credential-row aplicando flex-direction: column, gap: 0.6rem e white-space: nowrap no elemento <strong> para impedir a quebra de 'E-mail' e 'Senha'.
+
+2. No componente de modal de Casos BDD e no Checkout:
+Separe os nós inline que estão colados: adicione margin-right: 0.5rem no badge 'CENÁRIO' antes do título, e adicione espaçamento entre o label 'Endereço' e o badge 'Pendente'.
+
+3. No CSS global/App.css:
+Em telas <= 768px, adicione padding-top: calc(4.5rem + 10px) no container principal para compensar a altura do .mobile-header fixo.
+\`\`\`
+
+---
+
+3. **Código de Correção Direto:**
 \`\`\`css
 /* Correção no CSS do Portfólio (Mobile <= 480px) */
 @media (max-width: 480px) {
@@ -139,11 +159,6 @@ Como todos os testes passaram, gere em Markdown:
     white-space: nowrap !important;
   }
 }
-\`\`\`
-\`\`\`jsx
-/* Correção no JSX */
-<span className="qa-badge" style={{ marginRight: "0.5rem" }}>CENÁRIO</span>
-<span>{title}</span>
 \`\`\`
     `;
   }
@@ -160,6 +175,18 @@ Parabéns, Galileo! A aplicação está estável e aprovada em todos os 35 cená
    - Adicionar atributos semânticos completos no menu mobile (\`aria-expanded\`, \`aria-haspopup\`) e garantir contraste de cores mínimo de 4.5:1 no tema escuro.
 3. **Core Web Vitals & Otimização de Imagens:**
    - Utilizar formatos modernos como \`.webp\` e \`loading="lazy"\` nas imagens dos projetos do portfólio para reduzir o Largest Contentful Paint (LCP).
+
+---
+
+### 🤖 PROMPT PRONTO PARA IA DE CÓDIGO (COPIE E COLE NO CHAT DO PROJETO PORTFOLIO):
+\`\`\`text
+Atue como Desenvolvedor Front-end Sênior e Especialista em Performance Web. 
+Nossos testes E2E Cypress foram 100% aprovados e agora queremos aplicar as seguintes melhorias sugeridas pela IA:
+
+1. No menu mobile (MobileHeader): adicione aria-expanded={isMenuOpen} e aria-haspopup="true" no botão hambúrguer.
+2. No componente /curriculum: substitua o <iframe> por uma renderização nativa de currículo em HTML/CSS com botões elegantes de 'Visualizar PDF em nova aba' e 'Baixar PDF'.
+3. Otimize as tags <img> com loading="lazy" e decodificação assíncrona.
+\`\`\`
   `;
 }
 
