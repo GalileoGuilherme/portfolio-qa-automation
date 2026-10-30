@@ -11,7 +11,7 @@ on:
   # acionado após cada commit ou deploy na Vercel (main ou dev)
   repository_dispatch:
     types: [portfolio_deploy, portfolio_commit]
-
+    
   # Disparo manual no painel Actions com seleção de ambiente e branch
   workflow_dispatch:
     inputs:
