@@ -1,106 +1,177 @@
 
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f7fafc; margin: 0; padding: 20px; }
-    .container { max-width: 650px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0; }
-    .header { background: #e53e3e; color: #ffffff; padding: 25px; text-align: center; }
-    .header h1 { margin: 0; font-size: 1.3rem; font-weight: 700; }
-    .header p { margin: 6px 0 0 0; color: #f7fafc; font-size: 0.88rem; opacity: 0.9; }
-    .content { padding: 25px; color: #2d3748; line-height: 1.6; }
-    .badge { background: #fed7d7; color: #742a2a; padding: 6px 14px; border-radius: 9999px; font-weight: bold; font-size: 0.85rem; display: inline-block; }
-    .stats-card { background: #f7fafc; border: 1px solid #edf2f7; border-radius: 6px; padding: 15px; margin: 15px 0; }
-    .insights-card { background: #ffffff; border-left: 4px solid #e53e3e; padding: 15px; margin: 20px 0; border-top: 1px solid #edf2f7; border-right: 1px solid #edf2f7; border-bottom: 1px solid #edf2f7; border-radius: 0 6px 6px 0; }
-    .footer { background: #f7fafc; padding: 16px; text-align: center; font-size: 0.78rem; color: #718096; border-top: 1px solid #edf2f7; }
-    pre { background: #2d3748; color: #edf2f7; padding: 12px; border-radius: 5px; font-size: 0.82rem; overflow-x: auto; }
-    code { font-family: monospace; }
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relatório Executivo de QA & IA</title>
+  <style type="text/css">
+    body { margin: 0; padding: 0; background-color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    table { border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    td { vertical-align: top; }
+    @media only screen and (max-width: 620px) {
+      .email-container { width: 100% !important; padding: 10px !important; }
+      .metric-col { display: block !important; width: 100% !important; margin-bottom: 8px !important; }
+      .btn { display: block !important; width: 100% !important; box-sizing: border-box !important; text-align: center !important; margin: 6px 0 !important; }
+      .meta-item-left, .meta-item-right { display: block !important; width: 100% !important; text-align: left !important; }
+      .header-title { font-size: 20px !important; }
+    }
   </style>
 </head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>🚨 Alerta: Falha Detectada nos Testes E2E</h1>
-      <p>Portfólio Web • Galileo Guilherme</p>
-    </div>
+<body style="background-color: #0f172a; margin: 0; padding: 24px 0;">
+  <!-- Container Central -->
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #0f172a;">
+    <tr>
+      <td align="center">
+        <!-- Cartão Principal -->
+        <table class="email-container" width="600" border="0" cellspacing="0" cellpadding="0" style="width: 600px; max-width: 600px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.3); border: 1px solid #1e293b;">
+          
+          <!-- Top Bar com Logo e Tag de QA -->
+          <tr>
+            <td style="background-color: #090d16; padding: 20px 28px; border-bottom: 1px solid #1e293b;">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td>
+                    <span style="font-size: 16px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">
+                      ⚡ QA OPS <span style="color: #38bdf8;">INTELLIGENCE</span>
+                    </span>
+                  </td>
+                  <td align="right">
+                    <span style="background-color: #1e293b; color: #94a3b8; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.5px;">
+                      CYPRESS E2E
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-    <div class="content">
-      <div style="text-align: center; margin-bottom: 20px;">
-        <span class="badge">
-          ❌ 12 Falha(s) Detectada(s)
-        </span>
-      </div>
+          <!-- Header de Status -->
+          <tr>
+            <td style="background: linear-gradient(135deg, #059669, #047857); padding: 32px 28px; text-align: center; color: #ffffff;">
+              <div style="display: inline-block; background-color: rgba(255,255,255,0.2); backdrop-filter: blur(8px); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 12px; letter-spacing: 0.5px; border: 1px solid rgba(255,255,255,0.25);">
+                ✅ 100% GREEN • BUILD ESTÁVEL
+              </div>
+              <h1 class="header-title" style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; color: #ffffff; line-height: 1.3;">
+                Bateria de Testes Aprovada com Sucesso
+              </h1>
+              <p style="margin: 8px 0 0 0; font-size: 14px; color: rgba(255,255,255,0.9);">
+                Portfólio Web • Galileo Guilherme
+              </p>
+            </td>
+          </tr>
 
-      <div class="stats-card">
-        <h4 style="margin: 0 0 10px 0; color: #4a5568;">📊 Métricas de Execução:</h4>
-        <ul style="margin: 0; padding-left: 20px; font-size: 0.9rem;">
-          <li><strong>Total de Cenários Avaliados:</strong> 35</li>
-          <li><strong>Testes com Sucesso:</strong> <span style="color: #38a169; font-weight: bold;">33</span></li>
-          <li><strong>Falhas Encontradas:</strong> <span style="color: #e53e3e; font-weight: bold;">12</span></li>
-          <li><strong>Capturas de Tela Arquivadas:</strong> 12</li>
-        </ul>
-      </div>
+          <!-- Corpo do Relatório -->
+          <tr>
+            <td style="padding: 28px;">
 
-      <div class="insights-card">
-        <h3 style="margin-top: 0; color: #c53030;">
-          🤖 Diagnóstico da IA & Solução Recomendada:
-        </h3>
-        <div style="font-size: 0.92rem; white-space: pre-wrap;">
-### 🚨 Diagnóstico de Falha (Ação Imediata Necessária)
+              <!-- Métricas Principais (Cards) -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 24px;">
+                <tr>
+                  <td class="metric-col" width="23%" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: 800; color: #0f172a;">35</div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-top: 4px;">Cenários</div>
+                  </td>
+                  <td width="2%"></td>
+                  <td class="metric-col" width="23%" style="background-color: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 10px; padding: 14px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: 800; color: #059669;">35</div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: #059669; text-transform: uppercase; margin-top: 4px;">Aprovados</div>
+                  </td>
+                  <td width="2%"></td>
+                  <td class="metric-col" width="23%" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: 800; color: #64748b;">0</div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-top: 4px;">Falhas</div>
+                  </td>
+                  <td width="2%"></td>
+                  <td class="metric-col" width="23%" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: 800; color: #0284c7;">45s</div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-top: 4px;">Duração</div>
+                  </td>
+                </tr>
+              </table>
 
-1. **O que quebrou:**
-   - Auditoria de Responsividade Visual detectou esmagamento de elementos em telas móveis e/ou colisão com o cabeçalho fixo.
-   - Foram identificados textos inline colados sem espaçamento delimitador (`CENÁRIOLogin` e `EndereçoPendente`).
+              <!-- Metadados de Deploy & Git -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 16px 20px;">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td style="padding-bottom: 8px; border-bottom: 1px solid #e2e8f0;">
+                          <span style="font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Contexto da Execução</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 10px 0 6px 0;">
+                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                              <td class="meta-item-left" style="font-size: 13px; color: #64748b;">👤 <strong>Autor:</strong></td>
+                              <td class="meta-item-right" align="right" style="font-size: 13px; font-weight: 600; color: #0f172a;">Galileo Guilherme</td>
+                            </tr>
+                            <tr>
+                              <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">🔗 <strong>Commit:</strong></td>
+                              <td class="meta-item-right" align="right" style="font-size: 13px; font-weight: 600; color: #0284c7; padding-top: 6px;"><code>0473567</code> — fix(gemini): simplificar chamada com configuracao de geracao e fallback limpo</td>
+                            </tr>
+                            <tr>
+                              <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">🌐 <strong>Target Web:</strong></td>
+                              <td class="meta-item-right" align="right" style="font-size: 13px; padding-top: 6px;"><a href="https://portfolio-omega-six-18.vercel.app" style="color: #0284c7; text-decoration: none; font-weight: 600;">https://portfolio-omega-six-18.vercel.app</a></td>
+                            </tr>
+                            <tr>
+                              <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">⚙️ <strong>API Status:</strong></td>
+                              <td class="meta-item-right" align="right" style="padding-top: 6px;">
+                                <span style="background-color: #ecfdf5; color: #059669; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px;">
+                                  HTTP 200 (478ms)
+                                </span>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
 
-2. **Causa Raiz Técnica:**
-   - Em `.qa-credential-row`, o layout Flexbox sem `flex-wrap: wrap` ou sem `flex-direction: column` comprime o `<strong>`, forçando quebras anômalas em palavras curtas.
-   - Em nós React inline, a ausência de espaço no texto JSX (`CASO {i} · CENÁRIO{title}`) funde as palavras adjacentes.
+              <!-- Card de Diagnóstico & Insights da IA -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 28px;">
+                <tr>
+                  <td style="background-color: #ffffff; border-left: 4px solid #059669; border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; border-radius: 0 12px 12px 0; padding: 20px;">
+                    <div style="font-size: 15px; font-weight: 800; color: #0f172a; margin-bottom: 10px; display: flex; align-items: center;">
+                      🧠 DIAGNÓSTICO & PAIR PROGRAMMING IA
+                    </div>
+                    <div style="font-size: 13.5px; color: #334155; line-height: 1.6;">
+                      <p>⚠️ Chave do Gemini não configurada. Relatório básico gerado.</p>
+                    </div>
+                  </td>
+                </tr>
+              </table>
 
----
+              <!-- Ações Rápidas -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 12px;">
+                <tr>
+                  <td align="center">
+                    <a class="btn" href="https://github.com/GalileoGuilherme/ci-cd-portf-lio-cypress/actions" style="display: inline-block; background-color: #0f172a; color: #ffffff; font-size: 13px; font-weight: 700; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin: 4px;">
+                      🔍 Acessar Pipeline no GitHub Actions
+                    </a>
+                    
+                  </td>
+                </tr>
+              </table>
 
-### 🤖 PROMPT PRONTO PARA IA DE CÓDIGO (COPIE E COLE NO CHAT DO PROJETO PORTFOLIO):
-```text
-Atue como Desenvolvedor Front-end Sênior. Nosso sistema de testes automatizados E2E Cypress detectou anomalias visuais no portfólio. Aplique as correções abaixo:
+            </td>
+          </tr>
 
-1. No CSS da página de automação/loja:
-Adicione uma media query para telas <= 480px em .qa-credential-row aplicando flex-direction: column, gap: 0.6rem e white-space: nowrap no elemento <strong> para impedir a quebra de 'E-mail' e 'Senha'.
+          <!-- Rodapé -->
+          <tr>
+            <td style="background-color: #f8fafc; padding: 20px 28px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b;">
+              <p style="margin: 0 0 4px 0;">Disparado automaticamente pelo pipeline de CI/CD • Galileo Guilherme</p>
+              <p style="margin: 0; font-size: 11px; color: #94a3b8;">Cypress E2E • Google Gemini AI • GitHub Actions</p>
+            </td>
+          </tr>
 
-2. No componente de modal de Casos BDD e no Checkout:
-Separe os nós inline que estão colados: adicione margin-right: 0.5rem no badge 'CENÁRIO' antes do título, e adicione espaçamento entre o label 'Endereço' e o badge 'Pendente'.
-
-3. No CSS global/App.css:
-Em telas <= 768px, adicione padding-top: calc(4.5rem + 10px) no container principal para compensar a altura do .mobile-header fixo.
-```
-
----
-
-3. **Código de Correção Direto:**
-```css
-/* Correção no CSS do Portfólio (Mobile <= 480px) */
-@media (max-width: 480px) {
-  .qa-credential-row {
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 0.6rem !important;
-  }
-  .qa-credential-row strong {
-    white-space: nowrap !important;
-  }
-}
-```
-    </div>
-      </div>
-
-      <p style="font-size: 0.85rem; color: #718096;">
-        Este e-mail foi disparado automaticamente pelo pipeline de CI/CD do Cypress.
-      </p>
-    </div>
-
-    <div class="footer">
-      Antigravity AI Test Observer • Executado em 30/10/2026, 02:45:30
-    </div>
-  </div>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
   
