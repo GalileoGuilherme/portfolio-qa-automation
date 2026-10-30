@@ -241,110 +241,217 @@ async function callGeminiAPI(apiKey, promptText) {
   throw new Error("Nenhum modelo Gemini respondeu com sucesso.");
 }
 
-// 5. Motor HTML de Alto Padrão (Painel Executivo)
+// 5. Motor HTML de Alto Padrão (Design Responsivo, Moderno e Compatível com Todos os Clientes de E-mail)
 function buildEmailHtml(insightsText, metrics, env, api) {
   const isFail = metrics.hasFailures;
-  const primary = isFail ? "#ef4444" : "#10b981";
-  const apiColor = api.online ? "#10b981" : "#ef4444";
-  
-  // Converte Markdown básico para HTML simples para exibição limpa
+  const statusColor = isFail ? "#dc2626" : "#059669";
+  const statusLight = isFail ? "#fef2f2" : "#ecfdf5";
+  const statusBorder = isFail ? "#fca5a5" : "#a7f3d0";
+  const apiBadgeColor = api.online ? "#059669" : "#dc2626";
+  const apiBadgeBg = api.online ? "#ecfdf5" : "#fef2f2";
+
+  // Formatação rica de Markdown para HTML com realce de sintaxe e blocos modernos
   let formattedInsights = insightsText
-    .replace(/```(javascript|js|css|html|text|jsx)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/### (.*?)\n/g, '<h3 style="margin-top:20px; color:#1e293b;">$1</h3>')
-    .replace(/1\. (.*?)\n/g, '<br><strong>1.</strong> $1')
-    .replace(/2\. (.*?)\n/g, '<br><strong>2.</strong> $1')
-    .replace(/3\. (.*?)\n/g, '<br><strong>3.</strong> $1')
-    .replace(/4\. (.*?)\n/g, '<br><strong>4.</strong> $1');
+    .replace(/```(javascript|js|css|html|text|jsx)?\n([\s\S]*?)```/g, (match, lang, code) => {
+      const language = (lang || "code").toUpperCase();
+      return `
+        <div style="margin: 16px 0; border-radius: 8px; overflow: hidden; border: 1px solid #1e293b; background: #0f172a;">
+          <div style="background: #1e293b; padding: 6px 14px; font-size: 11px; font-weight: 700; color: #94a3b8; letter-spacing: 0.5px; border-bottom: 1px solid #334155;">
+            ${language}
+          </div>
+          <pre style="margin: 0; padding: 14px; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 12.5px; line-height: 1.6; color: #e2e8f0; overflow-x: auto; white-space: pre-wrap; word-break: break-word;"><code>${code.trim()}</code></pre>
+        </div>
+      `;
+    })
+    .replace(/\*\*(.*?)\*\*/g, '<strong style="color: #0f172a;">$1</strong>')
+    .replace(/### (.*?)\n/g, '<h3 style="margin: 22px 0 10px 0; color: #0f172a; font-size: 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">$1</h3>')
+    .replace(/#### (.*?)\n/g, '<h4 style="margin: 16px 0 8px 0; color: #334155; font-size: 14px; font-weight: 700;">$1</h4>')
+    .replace(/`([^`]+)`/g, '<code style="background: #f1f5f9; color: #dc2626; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12.5px;">$1</code>')
+    .replace(/1\. (.*?)\n/g, '<p style="margin: 6px 0; font-size: 14px; line-height: 1.6;"><strong style="color: #0284c7;">1.</strong> $1</p>')
+    .replace(/2\. (.*?)\n/g, '<p style="margin: 6px 0; font-size: 14px; line-height: 1.6;"><strong style="color: #0284c7;">2.</strong> $1</p>')
+    .replace(/3\. (.*?)\n/g, '<p style="margin: 6px 0; font-size: 14px; line-height: 1.6;"><strong style="color: #0284c7;">3.</strong> $1</p>')
+    .replace(/4\. (.*?)\n/g, '<p style="margin: 6px 0; font-size: 14px; line-height: 1.6;"><strong style="color: #0284c7;">4.</strong> $1</p>');
 
   return `
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f3f4f6; padding: 20px; color: #1f2937; line-height: 1.5; }
-    .container { max-width: 700px; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); overflow: hidden; }
-    .header { background: ${isFail ? 'linear-gradient(135deg, #ef4444, #991b1b)' : 'linear-gradient(135deg, #10b981, #047857)'}; padding: 30px; text-align: center; color: white; }
-    .header h1 { margin: 0; font-size: 24px; }
-    .content { padding: 30px; }
-    
-    /* Grid de Contexto do Deploy */
-    .meta-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; margin-bottom: 25px; font-size: 13px; }
-    .meta-box ul { list-style: none; padding: 0; margin: 0; }
-    .meta-box li { padding: 6px 0; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; }
-    .meta-box li:last-child { border-bottom: none; }
-    .meta-label { font-weight: 600; color: #64748b; }
-    
-    /* Grid de Métricas */
-    .metrics { display: table; width: 100%; border-collapse: collapse; margin-bottom: 25px; }
-    .metric-item { display: table-cell; width: 25%; text-align: center; border: 1px solid #e2e8f0; padding: 15px; background: #fff; }
-    .metric-item:first-child { border-radius: 8px 0 0 8px; }
-    .metric-item:last-child { border-radius: 0 8px 8px 0; }
-    .val { font-size: 24px; font-weight: bold; }
-    .lbl { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: bold; margin-top: 5px; }
-    
-    /* Insights IA */
-    .ai-card { border-left: 4px solid ${primary}; background: #f8fafc; padding: 20px; border-radius: 0 8px 8px 0; }
-    pre { background: #0f172a; color: #e2e8f0; padding: 15px; border-radius: 6px; font-size: 12px; overflow-x: auto; }
-    
-    /* Botões de Ação */
-    .actions { margin-top: 30px; text-align: center; }
-    .btn { display: inline-block; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; margin: 0 5px; }
-    .btn-primary { background: #0f172a; color: white; }
-    .btn-outline { background: transparent; border: 1px solid #cbd5e1; color: #475569; }
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Relatório Executivo de QA & IA</title>
+  <style type="text/css">
+    body { margin: 0; padding: 0; background-color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    table { border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    td { vertical-align: top; }
+    @media only screen and (max-width: 620px) {
+      .email-container { width: 100% !important; padding: 10px !important; }
+      .metric-col { display: block !important; width: 100% !important; margin-bottom: 8px !important; }
+      .btn { display: block !important; width: 100% !important; box-sizing: border-box !important; text-align: center !important; margin: 6px 0 !important; }
+      .meta-item-left, .meta-item-right { display: block !important; width: 100% !important; text-align: left !important; }
+      .header-title { font-size: 20px !important; }
+    }
   </style>
 </head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>${isFail ? '🚨 Regressão Detectada' : '✅ Sucesso E2E: Portfólio Estável'}</h1>
-    </div>
-    
-    <div class="content">
-      <!-- Contexto do Deploy -->
-      <div class="meta-box">
-        <ul>
-          <li><span class="meta-label">👤 Autor:</span> <span>${env.actor}</span></li>
-          <li><span class="meta-label">🔗 Commit:</span> <span>${env.commitMsg} (${env.shortHash})</span></li>
-          <li><span class="meta-label">🌐 Target URL:</span> <span><a href="${env.targetUrl}" style="color:#2563eb;">${env.targetUrl}</a></span></li>
-          <li><span class="meta-label">🖥️ Ambiente:</span> <span>Chrome Headless / Ubuntu</span></li>
-          <li><span class="meta-label">🗂️ Modificações:</span> <span>${env.modifiedFiles}</span></li>
-          <li><span class="meta-label">⚙️ API Lab (Render):</span> <span style="color:${apiColor}; font-weight:bold;">HTTP ${api.status} (${api.time}ms)</span></li>
-        </ul>
-      </div>
+<body style="background-color: #0f172a; margin: 0; padding: 24px 0;">
+  <!-- Container Central -->
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #0f172a;">
+    <tr>
+      <td align="center">
+        <!-- Cartão Principal -->
+        <table class="email-container" width="600" border="0" cellspacing="0" cellpadding="0" style="width: 600px; max-width: 600px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.3); border: 1px solid #1e293b;">
+          
+          <!-- Top Bar com Logo e Tag de QA -->
+          <tr>
+            <td style="background-color: #090d16; padding: 20px 28px; border-bottom: 1px solid #1e293b;">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td>
+                    <span style="font-size: 16px; font-weight: 800; color: #ffffff; letter-spacing: -0.5px;">
+                      ⚡ QA OPS <span style="color: #38bdf8;">INTELLIGENCE</span>
+                    </span>
+                  </td>
+                  <td align="right">
+                    <span style="background-color: #1e293b; color: #94a3b8; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.5px;">
+                      CYPRESS E2E
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-      <!-- Métricas Cypress -->
-      <div class="metrics">
-        <div class="metric-item">
-          <div class="val">${metrics.stats.tests}</div><div class="lbl">Cenários</div>
-        </div>
-        <div class="metric-item">
-          <div class="val" style="color:#10b981;">${metrics.stats.passes}</div><div class="lbl">Sucesso</div>
-        </div>
-        <div class="metric-item">
-          <div class="val" style="color:${isFail ? '#ef4444' : '#64748b'};">${metrics.stats.failures}</div><div class="lbl">Falhas</div>
-        </div>
-        <div class="metric-item">
-          <div class="val">${metrics.stats.duration}</div><div class="lbl">Tempo E2E</div>
-        </div>
-      </div>
+          <!-- Header de Status -->
+          <tr>
+            <td style="background: linear-gradient(135deg, ${statusColor}, ${isFail ? '#991b1b' : '#047857'}); padding: 32px 28px; text-align: center; color: #ffffff;">
+              <div style="display: inline-block; background-color: rgba(255,255,255,0.2); backdrop-filter: blur(8px); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 12px; letter-spacing: 0.5px; border: 1px solid rgba(255,255,255,0.25);">
+                ${isFail ? '🚨 REGRESSÃO DETECTADA' : '✅ 100% GREEN • BUILD ESTÁVEL'}
+              </div>
+              <h1 class="header-title" style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; color: #ffffff; line-height: 1.3;">
+                ${isFail ? 'Falhas Identificadas nos Testes E2E' : 'Bateria de Testes Aprovada com Sucesso'}
+              </h1>
+              <p style="margin: 8px 0 0 0; font-size: 14px; color: rgba(255,255,255,0.9);">
+                Portfólio Web • Galileo Guilherme
+              </p>
+            </td>
+          </tr>
 
-      <!-- Análise IA Generativa -->
-      <div class="ai-card">
-        <h4 style="margin-top:0; color:#0f172a;">🧠 Diagnóstico & Pair Programming IA</h4>
-        <div style="font-size: 14px;">${formattedInsights}</div>
-      </div>
+          <!-- Corpo do Relatório -->
+          <tr>
+            <td style="padding: 28px;">
 
-      <!-- Botões Rápidos -->
-      <div class="actions">
-        <a href="${env.actionUrl}" class="btn btn-primary">Ver Logs no GitHub Actions</a>
-        ${isFail ? `<a href="${env.actionUrl}" class="btn btn-outline">Baixar Artefatos (.zip)</a>` : ''}
-      </div>
-    </div>
-  </div>
+              <!-- Métricas Principais (Cards) -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 24px;">
+                <tr>
+                  <td class="metric-col" width="23%" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: 800; color: #0f172a;">${metrics.stats.tests}</div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-top: 4px;">Cenários</div>
+                  </td>
+                  <td width="2%"></td>
+                  <td class="metric-col" width="23%" style="background-color: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 10px; padding: 14px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: 800; color: #059669;">${metrics.stats.passes}</div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: #059669; text-transform: uppercase; margin-top: 4px;">Aprovados</div>
+                  </td>
+                  <td width="2%"></td>
+                  <td class="metric-col" width="23%" style="background-color: ${isFail ? '#fef2f2' : '#f8fafc'}; border: 1px solid ${isFail ? '#fca5a5' : '#e2e8f0'}; border-radius: 10px; padding: 14px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: 800; color: ${isFail ? '#dc2626' : '#64748b'};">${metrics.stats.failures}</div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: ${isFail ? '#dc2626' : '#64748b'}; text-transform: uppercase; margin-top: 4px;">Falhas</div>
+                  </td>
+                  <td width="2%"></td>
+                  <td class="metric-col" width="23%" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: 800; color: #0284c7;">${metrics.stats.duration}</div>
+                    <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-top: 4px;">Duração</div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Metadados de Deploy & Git -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 16px 20px;">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                      <tr>
+                        <td style="padding-bottom: 8px; border-bottom: 1px solid #e2e8f0;">
+                          <span style="font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Contexto da Execução</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 10px 0 6px 0;">
+                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                              <td class="meta-item-left" style="font-size: 13px; color: #64748b;">👤 <strong>Autor:</strong></td>
+                              <td class="meta-item-right" align="right" style="font-size: 13px; font-weight: 600; color: #0f172a;">${env.actor}</td>
+                            </tr>
+                            <tr>
+                              <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">🔗 <strong>Commit:</strong></td>
+                              <td class="meta-item-right" align="right" style="font-size: 13px; font-weight: 600; color: #0284c7; padding-top: 6px;"><code>${env.shortHash}</code> — ${env.commitMsg}</td>
+                            </tr>
+                            <tr>
+                              <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">🌐 <strong>Target Web:</strong></td>
+                              <td class="meta-item-right" align="right" style="font-size: 13px; padding-top: 6px;"><a href="${env.targetUrl}" style="color: #0284c7; text-decoration: none; font-weight: 600;">${env.targetUrl}</a></td>
+                            </tr>
+                            <tr>
+                              <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">⚙️ <strong>API Status:</strong></td>
+                              <td class="meta-item-right" align="right" style="padding-top: 6px;">
+                                <span style="background-color: ${apiBadgeBg}; color: ${apiBadgeColor}; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px;">
+                                  HTTP ${api.status} (${api.time}ms)
+                                </span>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Card de Diagnóstico & Insights da IA -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 28px;">
+                <tr>
+                  <td style="background-color: #ffffff; border-left: 4px solid ${statusColor}; border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; border-radius: 0 12px 12px 0; padding: 20px;">
+                    <div style="font-size: 15px; font-weight: 800; color: #0f172a; margin-bottom: 10px; display: flex; align-items: center;">
+                      🧠 DIAGNÓSTICO & PAIR PROGRAMMING IA
+                    </div>
+                    <div style="font-size: 13.5px; color: #334155; line-height: 1.6;">
+                      ${formattedInsights}
+                    </div>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Ações Rápidas -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 12px;">
+                <tr>
+                  <td align="center">
+                    <a class="btn" href="${env.actionUrl}" style="display: inline-block; background-color: #0f172a; color: #ffffff; font-size: 13px; font-weight: 700; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin: 4px;">
+                      🔍 Acessar Pipeline no GitHub Actions
+                    </a>
+                    ${isFail ? `
+                    <a class="btn" href="${env.actionUrl}" style="display: inline-block; background-color: #f1f5f9; color: #475569; font-size: 13px; font-weight: 700; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin: 4px; border: 1px solid #cbd5e1;">
+                      📥 Baixar Screenshots (.zip)
+                    </a>` : ''}
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- Rodapé -->
+          <tr>
+            <td style="background-color: #f8fafc; padding: 20px 28px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b;">
+              <p style="margin: 0 0 4px 0;">Disparado automaticamente pelo pipeline de CI/CD • Galileo Guilherme</p>
+              <p style="margin: 0; font-size: 11px; color: #94a3b8;">Cypress E2E • Google Gemini AI • GitHub Actions</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
-</html>`;
+</html>
+  `;
 }
 
 // 6. Execução Principal
