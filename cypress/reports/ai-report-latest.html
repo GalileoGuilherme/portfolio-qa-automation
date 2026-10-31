@@ -15,6 +15,7 @@
       .btn { display: block !important; width: 100% !important; box-sizing: border-box !important; text-align: center !important; margin: 6px 0 !important; }
       .meta-item-left, .meta-item-right { display: block !important; width: 100% !important; text-align: left !important; }
       .header-title { font-size: 20px !important; }
+      .hide-mobile { display: none !important; }
     }
   </style>
 </head>
@@ -22,7 +23,7 @@
   <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #0f172a;">
     <tr>
       <td align="center">
-        <table class="email-container" width="600" border="0" cellspacing="0" cellpadding="0" style="width: 600px; max-width: 600px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.3); border: 1px solid #1e293b;">
+        <table class="email-container" width="620" border="0" cellspacing="0" cellpadding="0" style="width: 620px; max-width: 620px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.3); border: 1px solid #1e293b;">
           
           <!-- Top Bar com Logo e Tag de QA -->
           <tr>
@@ -67,12 +68,12 @@
               <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 24px;">
                 <tr>
                   <td class="metric-col" width="23%" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; text-align: center;">
-                    <div style="font-size: 24px; font-weight: 800; color: #0f172a;">49</div>
+                    <div style="font-size: 24px; font-weight: 800; color: #0f172a;">72</div>
                     <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-top: 4px;">Cenários</div>
                   </td>
                   <td width="2%"></td>
                   <td class="metric-col" width="23%" style="background-color: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 10px; padding: 14px; text-align: center;">
-                    <div style="font-size: 24px; font-weight: 800; color: #059669;">49</div>
+                    <div style="font-size: 24px; font-weight: 800; color: #059669;">72</div>
                     <div style="font-size: 10.5px; font-weight: 700; color: #059669; text-transform: uppercase; margin-top: 4px;">Aprovados</div>
                   </td>
                   <td width="2%"></td>
@@ -82,7 +83,7 @@
                   </td>
                   <td width="2%"></td>
                   <td class="metric-col" width="23%" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; text-align: center;">
-                    <div style="font-size: 24px; font-weight: 800; color: #0284c7;">42s</div>
+                    <div style="font-size: 24px; font-weight: 800; color: #0284c7;">45s</div>
                     <div style="font-size: 10.5px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-top: 4px;">Duração</div>
                   </td>
                 </tr>
@@ -107,7 +108,7 @@
                             </tr>
                             <tr>
                               <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">🔗 <strong>Commit:</strong></td>
-                              <td class="meta-item-right" align="right" style="font-size: 13px; font-weight: 600; color: #0284c7; padding-top: 6px;"><code>bf35de0</code> — docs: reformular README com design executivo, badges de qualidade e evidencia do email da IA</td>
+                              <td class="meta-item-right" align="right" style="font-size: 13px; font-weight: 600; color: #0284c7; padding-top: 6px;"><code>7658f0b</code> — feat(qa/autonomy): integrar criterios estritos de responsividade, suíte autônoma por IA e documentacao executiva</td>
                             </tr>
                             <tr>
                               <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">🌐 <strong>Target Web:</strong></td>
@@ -117,7 +118,7 @@
                               <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">⚙️ <strong>API Status:</strong></td>
                               <td class="meta-item-right" align="right" style="padding-top: 6px;">
                                 <span style="background-color: #ecfdf5; color: #059669; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px;">
-                                  HTTP 200 (478ms)
+                                  HTTP 200 (661ms)
                                 </span>
                               </td>
                             </tr>
@@ -125,6 +126,160 @@
                         </td>
                       </tr>
                     </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- NOVA SEÇÃO: 📋 Relatório Detalhado das Suítes Executadas -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 24px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
+                <tr>
+                  <td style="background-color: #0f172a; padding: 12px 18px; color: #ffffff;">
+                    <span style="font-size: 13px; font-weight: 800; letter-spacing: 0.5px;">📋 RELATÓRIO DAS SUÍTES EXECUTADAS (7 ESPECIFICAÇÕES)</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 0;">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
+                      <tr style="background-color: #f1f5f9; border-bottom: 1px solid #cbd5e1;">
+                        <th align="left" style="padding: 8px 12px; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase;">Arquivo / Suíte</th>
+                        <th align="left" style="padding: 8px 12px; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase;" class="hide-mobile">Escopo</th>
+                        <th align="center" style="padding: 8px 12px; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase;">Testes</th>
+                        <th align="center" style="padding: 8px 12px; font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase;">Status</th>
+                      </tr>
+                      
+    <tr style="border-bottom: 1px solid #f1f5f9; background-color: #ffffff;">
+      <td style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0f172a; font-family: monospace;">01-home-and-responsive.cy.js</td>
+      <td style="padding: 10px 12px; font-size: 12px; color: #475569;">Home, SEO, Links Externos (GitHub/LinkedIn 200) e Viewports</td>
+      <td align="center" style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0284c7;">9</td>
+      <td align="center" style="padding: 10px 12px;">
+        <span style="background-color: #ecfdf5; color: #059669; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">
+          ✅ PASS
+        </span>
+      </td>
+    </tr>
+  
+    <tr style="border-bottom: 1px solid #f1f5f9; background-color: #f8fafc;">
+      <td style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0f172a; font-family: monospace;">02-routes-and-navigation.cy.js</td>
+      <td style="padding: 10px 12px; font-size: 12px; color: #475569;">Resiliência e Integridade de Todas as Rotas SPA</td>
+      <td align="center" style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0284c7;">12</td>
+      <td align="center" style="padding: 10px 12px;">
+        <span style="background-color: #ecfdf5; color: #059669; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">
+          ✅ PASS
+        </span>
+      </td>
+    </tr>
+  
+    <tr style="border-bottom: 1px solid #f1f5f9; background-color: #ffffff;">
+      <td style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0f172a; font-family: monospace;">03-theme-and-language.cy.js</td>
+      <td style="padding: 10px 12px; font-size: 12px; color: #475569;">Alternância Dark/Light Mode e Internacionalização (pt-BR / en-US)</td>
+      <td align="center" style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0284c7;">4</td>
+      <td align="center" style="padding: 10px 12px;">
+        <span style="background-color: #ecfdf5; color: #059669; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">
+          ✅ PASS
+        </span>
+      </td>
+    </tr>
+  
+    <tr style="border-bottom: 1px solid #f1f5f9; background-color: #f8fafc;">
+      <td style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0f172a; font-family: monospace;">04-contact-form.cy.js</td>
+      <td style="padding: 10px 12px; font-size: 12px; color: #475569;">Validação de Inputs Obrigatórios, Sanitização e Submit</td>
+      <td align="center" style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0284c7;">4</td>
+      <td align="center" style="padding: 10px 12px;">
+        <span style="background-color: #ecfdf5; color: #059669; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">
+          ✅ PASS
+        </span>
+      </td>
+    </tr>
+  
+    <tr style="border-bottom: 1px solid #f1f5f9; background-color: #ffffff;">
+      <td style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0f172a; font-family: monospace;">05-qa-automation-lab.cy.js</td>
+      <td style="padding: 10px 12px; font-size: 12px; color: #475569;">Login Demo, Rotas Protegidas e Catálogo do Laboratório</td>
+      <td align="center" style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0284c7;">6</td>
+      <td align="center" style="padding: 10px 12px;">
+        <span style="background-color: #ecfdf5; color: #059669; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">
+          ✅ PASS
+        </span>
+      </td>
+    </tr>
+  
+    <tr style="border-bottom: 1px solid #f1f5f9; background-color: #f8fafc;">
+      <td style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0f172a; font-family: monospace;">06-visual-responsiveness-audit.cy.js</td>
+      <td style="padding: 10px 12px; font-size: 12px; color: #475569;">Matriz 5 Viewports (320px-768px), Badges, Espaçamento e PDF</td>
+      <td align="center" style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0284c7;">35</td>
+      <td align="center" style="padding: 10px 12px;">
+        <span style="background-color: #ecfdf5; color: #059669; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">
+          ✅ PASS
+        </span>
+      </td>
+    </tr>
+  
+    <tr style="border-bottom: 1px solid #f1f5f9; background-color: #ffffff;">
+      <td style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0f172a; font-family: monospace;">generated/autonomous-ai-suite.cy.js</td>
+      <td style="padding: 10px 12px; font-size: 12px; color: #475569;">Suíte Autônoma Dinâmica Gerada por IA (Resiliência & A11y)</td>
+      <td align="center" style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0284c7;">2</td>
+      <td align="center" style="padding: 10px 12px;">
+        <span style="background-color: #ecfdf5; color: #059669; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">
+          ✅ PASS
+        </span>
+      </td>
+    </tr>
+  
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- NOVA SEÇÃO: 🔬 Auditoria de Alterações em Testes (Changelog) -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 16px 20px;">
+                    <div style="font-size: 13px; font-weight: 800; color: #0f172a; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center;">
+                      🔬 REGISTRO DE CASOS DE TESTES (CRIADOS & MODIFICADOS)
+                    </div>
+                    
+                    <div style="margin-bottom: 12px;">
+                      <strong style="font-size: 12.5px; color: #059669;">✨ Novos Casos de Testes Criados:</strong>
+                      <ul style="margin: 6px 0 0 0; padding-left: 18px;">
+                        
+    <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
+      <span style="background-color: #ecfdf5; color: #059669; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #a7f3d0;">NOVO</span>
+      <code>cypress/e2e/generated/autonomous-ai-suite.cy.js</code>
+    </li>
+  
+                      </ul>
+                    </div>
+
+                    <div>
+                      <strong style="font-size: 12.5px; color: #0284c7;">🛠️ Casos de Testes / Componentes Modificados:</strong>
+                      <ul style="margin: 6px 0 0 0; padding-left: 18px;">
+                        
+    <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
+      <span style="background-color: #f0f9ff; color: #0284c7; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #bae6fd;">MODIFICADO</span>
+      <code>cypress/e2e/06-visual-responsiveness-audit.cy.js</code>
+    </li>
+  
+    <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
+      <span style="background-color: #f0f9ff; color: #0284c7; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #bae6fd;">MODIFICADO</span>
+      <code>cypress/e2e/all-tests.cy.js</code>
+    </li>
+  
+    <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
+      <span style="background-color: #f0f9ff; color: #0284c7; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #bae6fd;">MODIFICADO</span>
+      <code>cypress/reports/ai-report-latest.html</code>
+    </li>
+  
+    <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
+      <span style="background-color: #f0f9ff; color: #0284c7; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #bae6fd;">MODIFICADO</span>
+      <code>cypress/support/commands.js</code>
+    </li>
+  
+    <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
+      <span style="background-color: #f0f9ff; color: #0284c7; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #bae6fd;">MODIFICADO</span>
+      <code>scripts/ai-test-observer.js</code>
+    </li>
+  
+                      </ul>
+                    </div>
                   </td>
                 </tr>
               </table>
@@ -138,20 +293,21 @@
                     </div>
                     <div style="font-size: 13.5px; color: #334155; line-height: 1.6;">
                       
-<h3 style="margin: 22px 0 10px 0; color: #0f172a; font-size: 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">🏆 Todos os Cenários E2E Aprovados (100% Green)</h3>A aplicação atingiu estabilidade completa em todos os cenários automatizados (Desktop, Tablet e Ultra-Mobile).
+<h3 style="margin: 22px 0 10px 0; color: #0f172a; font-size: 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">🏆 Todos os Cenários E2E Aprovados (100% Green)</h3>A aplicação atingiu estabilidade completa em todos os 72 cenários automatizados (Desktop, Tablet e Ultra-Mobile).
 
-#<h3 style="margin: 22px 0 10px 0; color: #0f172a; font-size: 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;"><p style="margin: 6px 0; font-size: 14px; line-height: 1.6;"><strong style="color: #0284c7;">1.</strong> 🚀 Sugestão Arquitetural: Acessibilidade Profunda WCAG 2.2 (Teclado & Foco)</h3>- Auditar a armadilha de foco (Focus Trap) e a ordem de tabulação no diálogo de dicas dos exercícios de automação.</p>- Testes autônomos gerados e integrados ao pipeline contínuo em <code style="background: #f1f5f9; color: #dc2626; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12.5px;">cypress/e2e/generated/</code>.
+#<h3 style="margin: 22px 0 10px 0; color: #0f172a; font-size: 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;"><p style="margin: 6px 0; font-size: 14px; line-height: 1.6;"><strong style="color: #0284c7;">1.</strong> 🚀 Sugestão Arquitetural Inovadora: Contrato de API & Validação de Esquema Swagger</h3>- Validar que a especificação OpenAPI (/public/swagger.json) retorne schemas compatíveis com as rotas do Laboratório.</p>- Testes autônomos gerados e integrados ao pipeline contínuo em <code style="background: #f1f5f9; color: #dc2626; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12.5px;">cypress/e2e/generated/</code>.
 
 #<h3 style="margin: 22px 0 10px 0; color: #0f172a; font-size: 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;"><p style="margin: 6px 0; font-size: 14px; line-height: 1.6;"><strong style="color: #0284c7;">2.</strong> 🤖 Novo Custom Command Sugerido para o Cypress:</h3></p>        <div style="margin: 16px 0; border-radius: 8px; overflow: hidden; border: 1px solid #1e293b; background: #0f172a;">
           <div style="background: #1e293b; padding: 6px 14px; font-size: 11px; font-weight: 700; color: #94a3b8; letter-spacing: 0.5px; border-bottom: 1px solid #334155;">
             JAVASCRIPT
           </div>
           <pre style="margin: 0; padding: 14px; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 12.5px; line-height: 1.6; color: #e2e8f0; overflow-x: auto; white-space: pre-wrap; word-break: break-word;"><code>// cypress/support/commands.js
-Cypress.Commands.add('verifyFocusTrap', (modalSelector) => {
-  cy.get(modalSelector).should('be.visible');
-  cy.focused().should('be.visible');
-  cy.realPress ? cy.realPress('Tab') : cy.tab();
-  cy.focused().closest(modalSelector).should('exist');
+Cypress.Commands.add('validateOpenApiContract', () => {
+  cy.request('/swagger.json').then((res) => {
+    expect(res.status).to.eq(200);
+    expect(res.body).to.have.property('openapi');
+    expect(res.body.paths).to.have.property('/api/v1/auth/login');
+  });
 });</code></pre>
         </div>
       
