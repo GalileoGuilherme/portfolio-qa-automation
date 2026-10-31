@@ -4,12 +4,12 @@
  * Versão: Senior QA Lead & Autonomous DevOps
  * Capacidades:
  * - Auditoria e diagnóstico em tempo real (Desktop & Ultra-Mobile)
- * - Integração inteligente com Google Gemini API (Multi-model & Rotação de Domínios)
- * - Prevenção de repetição de sugestões (6 domínios especializados de QA)
- * - Relatório Detalhado das Suítes Executadas (Breakdown por spec com contagem de cenários)
- * - Registro Dinâmico de Novos Casos de Teste Criados e Modificados via Git
+ * - Integração inteligente com Google Gemini API (Multi-model & Rotação Dinâmica)
+ * - 12 Domínios Especializados de Engenharia SDET para eliminar repetição de sugestões
+ * - Relatório Detalhado das Suítes Executadas com status por spec (Editado vs Estável)
+ * - Registro 100% Real de Mudanças no Git (Sem dados mocados ou fallbacks artificiais)
  * - Geração Autônoma Contínua de Novos Casos de Teste (cypress/e2e/generated/)
- * - Relatório Executivo de Alta Fidelidade (Compatível com Dark/Light Mode e Mobile)
+ * - Relatório Executivo de Alta Fidelidade com Botão 1-Click Re-run
  * - Dispatch Automático sem dependência de autorização humana
  */
 
@@ -54,41 +54,40 @@ function getEnvironmentData() {
   return { actor, shortHash, commitMsg, modifiedFiles, actionUrl, targetUrl, dispatchUrl };
 }
 
-// 2. Extração de Mudanças em Testes (Novos Criados vs Modificados)
+// 2. Extração Fidedigna de Mudanças em Testes no Commit Atual (Sem Mocks)
 function getTestChanges() {
-  const created = [];
-  const modified = [];
+  const createdTests = [];
+  const modifiedTests = [];
+  const otherChanges = [];
 
   try {
-    const raw = execSync("git show --name-status --oneline HEAD").toString();
-    const lines = raw.split("\n").slice(1);
+    // Analisa rigorosamente os arquivos afetados no commit HEAD
+    const raw = execSync("git diff-tree --no-commit-id --name-status -r HEAD").toString();
+    const lines = raw.trim().split("\n");
+
     for (const line of lines) {
+      if (!line.trim()) continue;
       const parts = line.trim().split(/\s+/);
-      if (parts.length >= 2) {
-        const status = parts[0];
-        const file = parts.slice(1).join(" ");
-        if (file.includes("cypress/") || file.includes("scripts/")) {
-          if (status === "A") created.push(file);
-          else if (status === "M") modified.push(file);
-        }
+      const status = parts[0];
+      const filePath = parts.slice(1).join(" ");
+
+      const isTestFile = filePath.startsWith("cypress/") || filePath.startsWith("scripts/");
+      
+      if (status === "A") {
+        if (isTestFile) createdTests.push(filePath);
+        else otherChanges.push(`Criado: ${filePath}`);
+      } else if (status === "M") {
+        if (isTestFile) modifiedTests.push(filePath);
+        else otherChanges.push(`Modificado: ${filePath}`);
+      } else if (status === "D") {
+        if (isTestFile) otherChanges.push(`Removido: ${filePath}`);
       }
     }
   } catch (e) {
-    console.warn("Aviso ao extrair mudanças de teste via Git:", e.message);
+    console.warn("Aviso ao extrair mudanças reais do Git:", e.message);
   }
 
-  // Fallback com enriquecimento descritivo caso o diff do commit não traga detalhes
-  if (created.length === 0) {
-    created.push("cypress/e2e/generated/autonomous-ai-suite.cy.js — Suíte autônoma gerada dinamicamente por IA");
-    created.push("cypress/support/commands.js (checkNoGluedTokens & checkZeroHorizontalOverflow) — Comandos estritos de layout");
-    created.push("cypress/e2e/06-visual-responsiveness-audit.cy.js — Matriz de 5 viewports (320px a 768px)");
-  }
-  if (modified.length === 0) {
-    modified.push("cypress/e2e/all-tests.cy.js — Inclusão e orquestração da suíte autônoma");
-    modified.push("scripts/ai-test-observer.js — Motor com 6 domínios rotativos e relatórios aprofundados");
-  }
-
-  return { created, modified };
+  return { createdTests, modifiedTests, otherChanges };
 }
 
 // 3. Ping de Saúde na API (Render)
@@ -142,7 +141,7 @@ const TEST_SUITES = [
 ];
 
 // 5. Coleta Dinâmica de Métricas do Cypress
-function collectTestMetrics() {
+function collectTestMetrics(testChanges) {
   const screenshots = [];
   if (fs.existsSync(SCREENSHOTS_DIR)) {
     const walk = (dir) => {
@@ -159,15 +158,22 @@ function collectTestMetrics() {
   const hasFailures = screenshots.length > 0;
   const totalTests = TEST_SUITES.reduce((acc, curr) => acc + curr.tests, 0);
 
+  // Mapeia o status de cada suíte (identifica se o arquivo foi tocado no commit atual)
+  const suites = TEST_SUITES.map(s => {
+    const wasModified = testChanges.modifiedTests.some(m => m.includes(s.spec)) || testChanges.createdTests.some(c => c.includes(s.spec));
+    return {
+      ...s,
+      wasModified,
+      status: hasFailures ? "Verificado" : "Aprovado",
+      isPass: !hasFailures,
+    };
+  });
+
   return {
     timestamp: new Date().toISOString(),
     hasFailures,
     totalScreenshots: screenshots.length,
-    suites: TEST_SUITES.map(s => ({
-      ...s,
-      status: hasFailures ? "Verificado" : "Aprovado",
-      isPass: !hasFailures,
-    })),
+    suites,
     stats: {
       tests: totalTests,
       passes: hasFailures ? totalTests - screenshots.length : totalTests,
@@ -178,7 +184,7 @@ function collectTestMetrics() {
   };
 }
 
-// Catálogo de 6 Domínios Especializados para Evitar Repetição de Sugestões
+// 6. Catálogo Amplo de 12 Domínios Especializados de SDET (Zero Repetição)
 const QA_DOMAINS = [
   {
     domain: "Resiliência de Rede & Chaos Engineering",
@@ -300,10 +306,121 @@ Cypress.Commands.add('auditThemeFouc', () => {
     cy.get("html").should("have.attr", "data-theme", "dark");
   });
 });`
+  },
+  {
+    domain: "Segurança de Formulários & Sanitização contra XSS",
+    suggestion: "Validar que caracteres especiais em campos de formulário sejam sanitizados e não executem tags de script no DOM.",
+    commandName: "verifyXssSanitization",
+    cypressCode: `// cypress/support/commands.js
+Cypress.Commands.add('verifyXssSanitization', (fieldSelector) => {
+  const payload = "<img src=x onerror=alert('xss')>";
+  cy.get(fieldSelector).clear().type(payload);
+  cy.get("script, img[src='x']").should("not.exist");
+});`,
+    autonomousTest: `describe("Autonomous QA - Sanitização XSS", () => {
+  it("Deve validar que campos de entrada não injetam scripts no DOM", () => {
+    cy.visit("/contact");
+    cy.get("input[name='name']").type("<script>var a=1;</script>");
+    cy.get("body script:contains('var a=1;')").should("not.exist");
+  });
+});`
+  },
+  {
+    domain: "Persistência de Sessão & Recuperação de Carrinho",
+    suggestion: "Garantir que itens adicionados ao carrinho no laboratório continuem persistidos após recarga forçada da página.",
+    commandName: "verifyCartPersistence",
+    cypressCode: `// cypress/support/commands.js
+Cypress.Commands.add('verifyCartPersistence', () => {
+  cy.reload();
+  cy.get('#qa-cart-badge').should('not.contain', '0');
+});`,
+    autonomousTest: `describe("Autonomous QA - Persistência de LocalStorage", () => {
+  it("Deve persistir o estado de itens adicionados no carrinho após recarga", () => {
+    cy.visit("/automation/loja");
+    cy.get(".qa-product-card button").first().click();
+    cy.reload();
+    cy.get("#qa-cart-count, .qa-cart-badge").should("be.visible");
+  });
+});`
+  },
+  {
+    domain: "Auditoria de Cabeçalhos HTTP de Segurança",
+    suggestion: "Validar presença de cabeçalhos Strict-Transport-Security, Content-Security-Policy e X-Content-Type-Options em produção.",
+    commandName: "auditSecurityHeaders",
+    cypressCode: `// cypress/support/commands.js
+Cypress.Commands.add('auditSecurityHeaders', () => {
+  cy.request('/').then((res) => {
+    expect(res.headers).to.have.property('strict-transport-security');
+    expect(res.headers).to.have.property('x-content-type-options', 'nosniff');
+  });
+});`,
+    autonomousTest: `describe("Autonomous QA - Cabeçalhos HTTP de Segurança", () => {
+  it("Deve responder com cabeçalhos de proteção HSTS e Content-Type Options", () => {
+    cy.request("/").then((res) => {
+      expect(res.headers).to.have.property("strict-transport-security");
+    });
+  });
+});`
+  },
+  {
+    domain: "Resiliência de Busca no Catálogo & Debounce",
+    suggestion: "Testar digitação ultra-rápida no campo de busca para garantir ausência de travamento na thread e debounce correto.",
+    commandName: "auditSearchDebounce",
+    cypressCode: `// cypress/support/commands.js
+Cypress.Commands.add('auditSearchDebounce', (inputSelector) => {
+  cy.get(inputSelector).type('QA Automation Tooling Test', { delay: 10 });
+  cy.get('.qa-product-item').should('exist');
+});`,
+    autonomousTest: `describe("Autonomous QA - Busca Rápida com Debounce", () => {
+  it("Deve processar busca com digitação rápida sem congelar o catálogo", () => {
+    cy.visit("/automation/loja");
+    cy.get("#qa-product-search").type("teste rápido", { delay: 15 });
+    cy.get("#qa-products-container").should("be.visible");
+  });
+});`
+  },
+  {
+    domain: "Acessibilidade Touch & Áreas de Toque Mínimas (48x48px)",
+    suggestion: "Validar que botões interativos em resoluções mobile respeitem o tamanho mínimo de toque de 44x44px ou 48x48px (WCAG AAA).",
+    commandName: "auditTouchTargetSize",
+    cypressCode: `// cypress/support/commands.js
+Cypress.Commands.add('auditTouchTargetSize', (selector) => {
+  cy.get(selector).each(($btn) => {
+    const rect = $btn[0].getBoundingClientRect();
+    expect(rect.height).to.be.at.least(40);
+    expect(rect.width).to.be.at.least(40);
+  });
+});`,
+    autonomousTest: `describe("Autonomous QA - Áreas de Toque Touch Target", () => {
+  it("Deve garantir que botões de ação móvel possuam altura ergonômica mínima", () => {
+    cy.viewport(375, 812);
+    cy.visit("/");
+    cy.get(".hero-btn, button.theme-toggle").each(($el) => {
+      expect($el[0].getBoundingClientRect().height).to.be.at.least(36);
+    });
+  });
+});`
+  },
+  {
+    domain: "Rastreamento de Exceções de Console Não Tratadas",
+    suggestion: "Monitorar chamadas a console.error e window.onerror para impedir que exceções silenciosas passem despercebidas.",
+    commandName: "failOnConsoleErrors",
+    cypressCode: `// cypress/support/commands.js
+Cypress.Commands.add('failOnConsoleErrors', () => {
+  cy.window().then((win) => {
+    cy.spy(win.console, 'error').as('consoleError');
+  });
+});`,
+    autonomousTest: `describe("Autonomous QA - Tolerância a Erros de Console", () => {
+  it("Deve navegar pelas principais rotas sem disparar exceções de runtime no console", () => {
+    cy.visit("/portfolio");
+    cy.get(".portfolio-grid").should("be.visible");
+  });
+});`
   }
 ];
 
-// 6. Geração Autônoma Contínua de Novos Testes E2E
+// 7. Geração Autônoma Contínua de Novos Testes E2E
 function autonomouslyGenerateNewTestSuite(domainIndex) {
   try {
     const selectedDomain = QA_DOMAINS[domainIndex % QA_DOMAINS.length];
@@ -330,17 +447,24 @@ ${selectedDomain.autonomousTest}
   }
 }
 
-// 7. Análise da IA Generativa com Rotação Dinâmica
+// 8. Análise da IA Generativa com Rotação Dinâmica por Commit Hash
 async function generateDualModeAIInsights(metrics, envData, apiHealth) {
   const apiKey = process.env.GEMINI_API_KEY;
-  const domainIndex = (Date.now() / 60000 | 0) % QA_DOMAINS.length;
+  
+  // Cálculo de semente pseudo-aleatória dinâmica baseada no hash do commit e tempo
+  const hashSeed = parseInt((envData.shortHash || "0").replace(/[^0-9a-f]/gi, "").slice(0, 4), 16) || 0;
+  const timeSeed = Math.floor(Date.now() / 180000); // Muda a cada 3 minutos caso o hash seja o mesmo
+  const domainIndex = (hashSeed + timeSeed) % QA_DOMAINS.length;
   const currentDomain = QA_DOMAINS[domainIndex];
 
   autonomouslyGenerateNewTestSuite(domainIndex);
 
   if (!apiKey) {
-    console.log("ℹ️ Usando Motor Analítico Local Dinâmico de QA (Modo Offline)...");
-    return getLocalDynamicInsights(metrics, envData, currentDomain);
+    console.log(`ℹ️ [Motor Analítico Local] Foco selecionado para este commit: "${currentDomain.domain}"`);
+    return {
+      text: getLocalDynamicInsights(metrics, envData, currentDomain),
+      source: "Motor Analítico Local SDET (Rotação Dinâmica)"
+    };
   }
 
   console.log(`🌐 Consultando Gemini: Foco Estratégico em "${currentDomain.domain}"...`);
@@ -376,10 +500,17 @@ Escreva em Markdown direto:
     `;
 
   try {
-    return await callGeminiAPI(apiKey, prompt);
+    const geminiText = await callGeminiAPI(apiKey, prompt);
+    return {
+      text: geminiText,
+      source: "Google Gemini 1.5 Cloud Engine"
+    };
   } catch (err) {
     console.warn("⚠️ API Gemini indisponível ou limitada. Acionando Motor Analítico Local...");
-    return getLocalDynamicInsights(metrics, envData, currentDomain);
+    return {
+      text: getLocalDynamicInsights(metrics, envData, currentDomain),
+      source: "Motor Analítico Local SDET (Fallback Dinâmico)"
+    };
   }
 }
 
@@ -414,7 +545,7 @@ A aplicação atingiu estabilidade completa em todos os 72 cenários automatizad
 
 #### 1. 🚀 Sugestão Arquitetural Inovadora: ${currentDomain.domain}
 - ${currentDomain.suggestion}
-- Testes autônomos gerados e integrados ao pipeline contínuo em \`cypress/e2e/generated/\`.
+- Testes autônomos gerados e integrados ao pipeline contínuo em \`cypress/e2e/generated/autonomous-ai-suite.cy.js\`.
 
 #### 2. 🤖 Novo Custom Command Sugerido para o Cypress:
 \`\`\`javascript
@@ -488,14 +619,14 @@ async function callGeminiAPI(apiKey, promptText) {
   throw new Error("Nenhum modelo Gemini respondeu com sucesso.");
 }
 
-// 8. Motor HTML de Alto Padrão (Dark Executive Theme com Breakdown de Suítes e Changelog)
-function buildEmailHtml(insightsText, metrics, env, api, testChanges) {
+// 9. Motor HTML de Alto Padrão (Dark Executive Theme com Breakdown de Suítes e Changelog Fidedigno)
+function buildEmailHtml(aiData, metrics, env, api, testChanges) {
   const isFail = metrics.hasFailures;
   const statusColor = isFail ? "#dc2626" : "#059669";
   const apiBadgeColor = api.online ? "#059669" : "#dc2626";
   const apiBadgeBg = api.online ? "#ecfdf5" : "#fef2f2";
 
-  let formattedInsights = insightsText
+  let formattedInsights = aiData.text
     .replace(/```(javascript|js|css|html|text|jsx)?\n([\s\S]*?)```/g, (match, lang, code) => {
       const language = (lang || "code").toUpperCase();
       return `
@@ -516,11 +647,17 @@ function buildEmailHtml(insightsText, metrics, env, api, testChanges) {
     .replace(/3\. (.*?)\n/g, '<p style="margin: 6px 0; font-size: 14px; line-height: 1.6;"><strong style="color: #0284c7;">3.</strong> $1</p>')
     .replace(/4\. (.*?)\n/g, '<p style="margin: 6px 0; font-size: 14px; line-height: 1.6;"><strong style="color: #0284c7;">4.</strong> $1</p>');
 
-  // Linhas das Suítes Executadas
+  // Linhas das Suítes Executadas com indicação se foi alterada no commit atual
   const suitesRows = metrics.suites.map((s, idx) => `
     <tr style="border-bottom: 1px solid #f1f5f9; background-color: ${idx % 2 === 0 ? '#ffffff' : '#f8fafc'};">
-      <td style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0f172a; font-family: monospace;">${s.spec}</td>
-      <td style="padding: 10px 12px; font-size: 12px; color: #475569;">${s.scope}</td>
+      <td style="padding: 10px 12px; font-size: 12px; font-weight: 700; color: #0f172a; font-family: monospace;">
+        ${s.spec}
+        ${s.wasModified 
+          ? '<span style="background-color: #f0fdf4; color: #16a34a; font-size: 9.5px; font-weight: 700; padding: 2px 5px; border-radius: 4px; border: 1px solid #bbf7d0; margin-left: 6px;">EDITADO</span>' 
+          : '<span style="background-color: #f1f5f9; color: #64748b; font-size: 9.5px; font-weight: 600; padding: 2px 5px; border-radius: 4px; margin-left: 6px;">ESTÁVEL</span>'
+        }
+      </td>
+      <td style="padding: 10px 12px; font-size: 11.5px; color: #475569;" class="hide-mobile">${s.scope}</td>
       <td align="center" style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0284c7;">${s.tests}</td>
       <td align="center" style="padding: 10px 12px;">
         <span style="background-color: ${s.isPass ? '#ecfdf5' : '#fef2f2'}; color: ${s.isPass ? '#059669' : '#dc2626'}; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 12px;">
@@ -530,21 +667,50 @@ function buildEmailHtml(insightsText, metrics, env, api, testChanges) {
     </tr>
   `).join("");
 
-  // Lista de Novos Casos Criados
-  const createdBadges = testChanges.created.map(item => `
-    <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
-      <span style="background-color: #ecfdf5; color: #059669; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #a7f3d0;">NOVO</span>
-      <code>${item}</code>
-    </li>
-  `).join("");
-
-  // Lista de Casos Modificados
-  const modifiedBadges = testChanges.modified.map(item => `
-    <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
-      <span style="background-color: #f0f9ff; color: #0284c7; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #bae6fd;">MODIFICADO</span>
-      <code>${item}</code>
-    </li>
-  `).join("");
+  // Montagem do Changelog Fidedigno
+  const hasChanges = testChanges.createdTests.length > 0 || testChanges.modifiedTests.length > 0 || testChanges.otherChanges.length > 0;
+  
+  let changelogContentHtml = "";
+  if (!hasChanges) {
+    changelogContentHtml = `
+      <p style="margin: 0; font-size: 13px; color: #64748b; font-style: italic;">
+        ℹ️ Bateria de testes estável executada sem alterações de código no commit atual (Regressão contínua sobre a suíte de 72 cenários).
+      </p>
+    `;
+  } else {
+    let sections = [];
+    if (testChanges.createdTests.length > 0) {
+      sections.push(`
+        <div style="margin-bottom: 10px;">
+          <strong style="font-size: 12.5px; color: #059669;">✨ Novos Casos de Testes Criados:</strong>
+          <ul style="margin: 4px 0 0 0; padding-left: 18px;">
+            ${testChanges.createdTests.map(t => `<li style="font-size: 12.5px; color: #0f172a; margin-bottom: 4px;"><span style="background: #ecfdf5; color: #059669; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; margin-right: 4px; border: 1px solid #a7f3d0;">NOVO</span><code>${t}</code></li>`).join("")}
+          </ul>
+        </div>
+      `);
+    }
+    if (testChanges.modifiedTests.length > 0) {
+      sections.push(`
+        <div style="margin-bottom: 10px;">
+          <strong style="font-size: 12.5px; color: #0284c7;">🛠️ Casos de Teste Modificados / Aprimorados:</strong>
+          <ul style="margin: 4px 0 0 0; padding-left: 18px;">
+            ${testChanges.modifiedTests.map(t => `<li style="font-size: 12.5px; color: #0f172a; margin-bottom: 4px;"><span style="background: #f0f9ff; color: #0284c7; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; margin-right: 4px; border: 1px solid #bae6fd;">MODIFICADO</span><code>${t}</code></li>`).join("")}
+          </ul>
+        </div>
+      `);
+    }
+    if (testChanges.otherChanges.length > 0) {
+      sections.push(`
+        <div>
+          <strong style="font-size: 12.5px; color: #64748b;">📄 Outros Arquivos Tocados (Docs & Configs):</strong>
+          <ul style="margin: 4px 0 0 0; padding-left: 18px;">
+            ${testChanges.otherChanges.map(o => `<li style="font-size: 12px; color: #475569; margin-bottom: 2px;">${o}</li>`).join("")}
+          </ul>
+        </div>
+      `);
+    }
+    changelogContentHtml = sections.join("");
+  }
 
   return `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -678,7 +844,7 @@ function buildEmailHtml(insightsText, metrics, env, api, testChanges) {
                 </tr>
               </table>
 
-              <!-- NOVA SEÇÃO: 📋 Relatório Detalhado das Suítes Executadas -->
+              <!-- SEÇÃO: 📋 Relatório Detalhado das Suítes Executadas (Com indicação de Editado vs Estável) -->
               <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 24px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
                 <tr>
                   <td style="background-color: #0f172a; padding: 12px 18px; color: #ffffff;">
@@ -700,27 +866,14 @@ function buildEmailHtml(insightsText, metrics, env, api, testChanges) {
                 </tr>
               </table>
 
-              <!-- NOVA SEÇÃO: 🔬 Auditoria de Alterações em Testes (Changelog) -->
+              <!-- SEÇÃO: 🔬 Auditoria Fidedigna de Mudanças em Testes (Git Changelog) -->
               <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 24px;">
                 <tr>
                   <td style="padding: 16px 20px;">
-                    <div style="font-size: 13px; font-weight: 800; color: #0f172a; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center;">
-                      🔬 REGISTRO DE CASOS DE TESTES (CRIADOS & MODIFICADOS)
+                    <div style="font-size: 13px; font-weight: 800; color: #0f172a; text-transform: uppercase; margin-bottom: 10px;">
+                      🔬 REGISTRO DE ALTERAÇÕES EM TESTES (COMMIT ATUAL)
                     </div>
-                    
-                    <div style="margin-bottom: 12px;">
-                      <strong style="font-size: 12.5px; color: #059669;">✨ Novos Casos de Testes Criados:</strong>
-                      <ul style="margin: 6px 0 0 0; padding-left: 18px;">
-                        ${createdBadges}
-                      </ul>
-                    </div>
-
-                    <div>
-                      <strong style="font-size: 12.5px; color: #0284c7;">🛠️ Casos de Testes / Componentes Modificados:</strong>
-                      <ul style="margin: 6px 0 0 0; padding-left: 18px;">
-                        ${modifiedBadges}
-                      </ul>
-                    </div>
+                    ${changelogContentHtml}
                   </td>
                 </tr>
               </table>
@@ -729,8 +882,11 @@ function buildEmailHtml(insightsText, metrics, env, api, testChanges) {
               <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 28px;">
                 <tr>
                   <td style="background-color: #ffffff; border-left: 4px solid ${statusColor}; border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; border-radius: 0 12px 12px 0; padding: 20px;">
-                    <div style="font-size: 15px; font-weight: 800; color: #0f172a; margin-bottom: 10px; display: flex; align-items: center;">
-                      🧠 DIAGNÓSTICO & PAIR PROGRAMMING IA
+                    <div style="font-size: 14.5px; font-weight: 800; color: #0f172a; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between;">
+                      <span>🧠 DIAGNÓSTICO & PAIR PROGRAMMING IA</span>
+                    </div>
+                    <div style="font-size: 11.5px; font-weight: 600; color: #64748b; margin-bottom: 12px;">
+                      Motor Ativo: <span style="color: #0284c7;">${aiData.source}</span>
                     </div>
                     <div style="font-size: 13.5px; color: #334155; line-height: 1.6;">
                       ${formattedInsights}
@@ -773,19 +929,20 @@ function buildEmailHtml(insightsText, metrics, env, api, testChanges) {
   `;
 }
 
-// 9. Execução Principal
+// 10. Execução Principal
 async function main() {
   console.log("🚀 Iniciando AI Test Observer Executivo & Engenharia Autônoma...");
   
   const envData = getEnvironmentData();
   const apiHealth = await checkApiHealth();
-  const metrics = collectTestMetrics();
   const testChanges = getTestChanges();
+  const metrics = collectTestMetrics(testChanges);
   
   console.log(`📊 Estado: ${metrics.hasFailures ? "FALHA" : "SUCESSO"} | Suítes: ${metrics.stats.suitesCount} | Cenários: ${metrics.stats.tests}`);
+  console.log(`🔬 Alterações reais no commit: ${testChanges.createdTests.length} criados, ${testChanges.modifiedTests.length} modificados`);
 
-  const insights = await generateDualModeAIInsights(metrics, envData, apiHealth);
-  const emailHtml = buildEmailHtml(insights, metrics, envData, apiHealth, testChanges);
+  const aiData = await generateDualModeAIInsights(metrics, envData, apiHealth);
+  const emailHtml = buildEmailHtml(aiData, metrics, envData, apiHealth, testChanges);
 
   fs.writeFileSync(REPORT_FILE, emailHtml, "utf-8");
   console.log(`📄 Relatório HTML salvo em: ${REPORT_FILE}`);

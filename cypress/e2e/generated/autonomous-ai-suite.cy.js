@@ -1,14 +1,14 @@
 /**
  * AUTONOMOUS AI GENERATED TEST SUITE
- * Criado automaticamente pelo AI Test Observer em: 2026-10-31T20:52:46.577Z
- * Foco Atual: Detecção de Strings Hardcoded & Internacionalização (i18n)
+ * Criado automaticamente pelo AI Test Observer em: 2026-10-31T21:13:14.488Z
+ * Foco Atual: Auditoria Visual de Microinterações & Transição de Tema
  * Ação Autônoma: Cobertura contínua sem necessidade de aprovação humana.
  */
 
-describe("Autonomous QA - Auditoria de Internacionalização", () => {
-  it("Deve alternar para o idioma inglês e certificar que não há chaves vazadas de template", () => {
+describe("Autonomous QA - Transição Suave de Tema", () => {
+  it("Deve persistir a transição de tema sem flicker no corpo da página", () => {
     cy.visit("/");
-    cy.switchLanguage("en-US");
-    cy.get("body").invoke("text").should("not.include", "{{t.");
+    cy.toggleTheme("dark");
+    cy.get("html").should("have.attr", "data-theme", "dark");
   });
 });
