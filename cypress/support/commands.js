@@ -6,16 +6,22 @@
 // Conjunto padrão de viewports para testes cross-device
 export const VIEWPORTS = [
   { name: "Desktop (1280x720)", type: "desktop", width: 1280, height: 720 },
+  { name: "Tablet iPad (768x1024)", type: "tablet", width: 768, height: 1024 },
+  { name: "Mobile iPhone 12/13 (390x844)", type: "mobile", width: 390, height: 844 },
   { name: "Mobile iPhone X (375x812)", type: "mobile", width: 375, height: 812 },
+  { name: "Mobile Galaxy S20 (360x800)", type: "mobile", width: 360, height: 800 },
+  { name: "Mobile iPhone SE / Compact (320x568)", type: "mobile", width: 320, height: 568 },
 ];
 
 /**
  * Define a resolução de viewport de forma padronizada.
- * @param {'desktop'|'mobile'|Object} device
+ * @param {'desktop'|'mobile'|'tablet'|Object} device
  */
 Cypress.Commands.add("setDeviceViewport", (device = "desktop") => {
   if (device === "desktop" || device.type === "desktop") {
     cy.viewport(1280, 720);
+  } else if (device === "tablet" || device.type === "tablet") {
+    cy.viewport(768, 1024);
   } else if (device === "mobile" || device.type === "mobile") {
     cy.viewport(device.width || 375, device.height || 812);
   } else if (typeof device === "object") {
@@ -120,7 +126,6 @@ Cypress.Commands.add("fillContactForm", ({ name, email, message }) => {
  * Valida que o cabeçalho fixo/sticky não sobreponha (occlude/collide) o conteúdo da página.
  * @param {string} headerSelector - Seletor do cabeçalho
  * @param {string} contentSelector - Seletor do primeiro bloco ou título visível
- * @example cy.checkHeaderOcclusion('.mobile-header:visible', 'h1, h2')
  */
 Cypress.Commands.add("checkHeaderOcclusion", (headerSelector = "header:visible", contentSelector = "h1:visible, h2:visible") => {
   cy.log("📐 Verificando sobreposição visual do cabeçalho");
@@ -149,7 +154,6 @@ Cypress.Commands.add("checkHeaderOcclusion", (headerSelector = "header:visible",
  * Valida que elementos curtos (labels, badges, títulos) não sofram quebra de linha
  * acidental por estarem espremidos em containers sem flex-wrap.
  * @param {string} selector - Seletor dos elementos a auditar
- * @example cy.checkNoUnnaturalWordWrap('.qa-credential-row strong, .qa-credential-row button')
  */
 Cypress.Commands.add("checkNoUnnaturalWordWrap", (selector) => {
   cy.log(`🔎 Auditando quebra indesejada de texto em: ${selector}`);
@@ -158,19 +162,51 @@ Cypress.Commands.add("checkNoUnnaturalWordWrap", (selector) => {
     if (!$el.is(":visible")) return;
 
     const text = $el.text().trim();
-    // Aplica a regra a palavras curtas ou botões de ação que não deveriam empilhar caracteres
     if (text.length > 0 && text.length <= 15) {
       const computed = window.getComputedStyle($el[0]);
       const lineHeight = parseFloat(computed.lineHeight) || (parseFloat(computed.fontSize) * 1.3);
       const height = $el[0].getBoundingClientRect().height;
 
-      // Se a altura do elemento exceder 1.6x a altura de linha, a palavra foi quebrada em 2+ linhas
       const lines = Math.round(height / lineHeight);
       expect(
         lines,
         `Texto "${text}" no elemento <${$el[0].tagName.toLowerCase()}> foi espremido e quebrado em ${lines} linhas!`
       ).to.be.at.most(1);
     }
+  });
+});
+
+/**
+ * Valida que palavras ou tokens no DOM não estejam colados sem espaço delimitador.
+ * Impede anomalias como 'CENÁRIOLogin', 'EndereçoPendente', 'E-mailPendente'.
+ * @param {string} selector - Seletor dos containers ou labels
+ * @param {RegExp[]} forbiddenConcatenations - Padrões proibidos de junção
+ */
+Cypress.Commands.add("checkNoGluedTokens", (selector, forbiddenConcatenations = [/CENÁRIO[A-Za-z]/, /EndereçoPendente/, /E-mailPendente/, /Nome para entregaPendente/]) => {
+  cy.log(`🔎 Auditando colisão/junção textual de badges e labels em: ${selector}`);
+
+  cy.get(selector).each(($el) => {
+    const text = $el.text().replace(/\s+/g, " ").trim();
+    forbiddenConcatenations.forEach((regex) => {
+      expect(
+        text,
+        `Texto colado incorretamente sem espaço delimitador no elemento (${regex}): "${text}"`
+      ).not.to.match(regex);
+    });
+  });
+});
+
+/**
+ * Valida que a página atual tem largura compatível com o viewport e zero rolagem horizontal.
+ */
+Cypress.Commands.add("checkZeroHorizontalOverflow", () => {
+  cy.window().then((win) => {
+    const scrollWidth = win.document.documentElement.scrollWidth;
+    const innerWidth = win.innerWidth;
+    expect(
+      scrollWidth,
+      `A página gerou rolagem horizontal indesejada (scrollWidth: ${scrollWidth}px > viewport: ${innerWidth}px)`
+    ).to.be.lte(innerWidth + 1);
   });
 });
 
@@ -198,7 +234,6 @@ Cypress.Commands.add("checkResponsiveRowSpacing", (rowSelector) => {
       const computed = window.getComputedStyle($row[0]);
       const isWrap = computed.flexWrap === "wrap" || computed.display !== "flex";
 
-      // Se a linha tem filhos que somam mais que a largura disponível e não tem wrap, há esmagamento
       if (totalChildrenWidth > rowRect.width + 5) {
         expect(
           isWrap,

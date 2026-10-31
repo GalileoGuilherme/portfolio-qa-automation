@@ -9,4 +9,4 @@ import "./03-theme-and-language.cy";
 import "./04-contact-form.cy";
 import "./05-qa-automation-lab.cy";
 import "./06-visual-responsiveness-audit.cy";
-
+import "./generated/autonomous-ai-suite.cy";
