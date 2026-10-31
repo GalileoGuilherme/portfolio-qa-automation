@@ -69,8 +69,7 @@
 ```text
 ├── .github/
 │   └── workflows/
-│       ├── cypress.yml                   # Pipeline CI/CD, execução E2E e orquestração de IA
-│       └── trigger-e2e-on-portfolio.yml  # Template para disparo cruzado via repository_dispatch
+│       └── cypress.yml                   # Pipeline CI/CD, execução E2E e orquestração de IA
 ├── cypress/
 │   ├── e2e/
 │   │   ├── 01-home-and-responsive.cy.js  # Elementos centrais, SEO, overflow zero e social links (9 testes)
