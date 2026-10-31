@@ -9,17 +9,18 @@
 ![Node Version](https://img.shields.io/badge/node-%3E%3D20.0.0-339933?style=flat&logo=node.js&logoColor=white)
 ![Autonomous QA](https://img.shields.io/badge/Autonomous%20QA-Self--Generating%20Suites-blueviolet?style=flat)
 ![Cross-Device Matrix](https://img.shields.io/badge/viewports-320px%20%E2%86%92%201280px-blue?style=flat)
+![E2E Scenarios](https://img.shields.io/badge/E2E%20Scenarios-72%20Cen%C3%A1rios-success?style=flat)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 <p align="center">
-  Uma arquitetura corporativa completa de <b>Engenharia de Qualidade Autônoma (QA Ops)</b> desenvolvida para validação contínua e autoevolução da aplicação web <a href="https://portfolio-omega-six-18.vercel.app/"><b>Galileo Guilherme | Portfolio Web</b></a>. Integra <b>auditoria visual contra esmagamento de elementos</b>, <b>detecção de colisão de strings no DOM</b>, <b>motor de geração dinâmica de testes por IA</b> e <b>disparo de relatórios executivos de alto padrão</b> em tempo real.
+  Uma arquitetura corporativa completa de <b>Engenharia de Qualidade Autônoma (QA Ops)</b> desenvolvida para validação contínua e autoevolução da aplicação web <a href="https://portfolio-omega-six-18.vercel.app/"><b>Galileo Guilherme | Portfolio Web</b></a>. Integra <b>72 cenários de testes automatizados</b> (Desktop, Tablet e Ultra-Mobile), <b>auditoria visual contra esmagamento de elementos</b>, <b>detecção de colisão de strings no DOM</b>, <b>motor de geração dinâmica de testes por IA</b> e <b>disparo de relatórios executivos de alto padrão com botão de re-execução (1-Click Re-run)</b> em tempo real.
 </p>
 
 ---
 
 <img src="docs/images/qa-ops-intelligence-email.png" alt="Relatório Executivo QA Ops Intelligence - E-mail com IA" width="480" style="border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);" />
 
-*Template executivo escuro gerado automaticamente e despachado via SMTP com métricas de build, saúde de API em tempo real e Pair Programming gerado por IA.*
+*Template executivo escuro gerado automaticamente e despachado via SMTP com detalhamento de suítes, registro de casos criados/modificados, saúde de API em tempo real e botão nativo para re-disparar testes.*
 
 ---
 
@@ -38,7 +39,12 @@
   5. *Auditoria de Internacionalização (i18n)* (varredura de nós textuais contra vazamento de template keys)
   6. *Transição de Tema & Estabilidade Visual* (eliminação de FOUC e colisão de bounding boxes)
 
-### 2. 📱 Critérios Estritos de Aceitação & Responsividade Ultra-Mobile
+### 2. 📧 Relatório Executivo com Ações Rápidas (1-Click Re-run)
+- **Tabela com Detalhamento das Suítes Executadas**: Lista cada arquivo de teste, seu escopo técnico, quantidade exata de cenários e status de validação (`✅ PASS`).
+- **Changelog de Testes (Criados vs Modificados)**: Extrai automaticamente do Git e exibe badges destacando novos casos criados e arquivos de teste aprimorados.
+- **Botão Direto de Re-execução**: Botão `🔁 Disparar Nova Execução de Testes (Re-run E2E)` posicionado no final do e-mail que direciona para o trigger `workflow_dispatch` do GitHub Actions, permitindo rodar novamente a suíte completa com 1 clique de qualquer cliente de e-mail (Outlook, Gmail ou mobile).
+
+### 3. 📱 Critérios Estritos de Aceitação & Responsividade Ultra-Mobile
 - **Matriz de Resoluções Testadas**:
   - `320x568` (iPhone SE / Telas ultracompactas)
   - `360x800` (Samsung Galaxy S20 / Android Padrão)
@@ -53,7 +59,7 @@
   - `cy.checkResponsiveRowSpacing()`: Garante `flex-wrap: wrap` e espaçamento quando múltiplos botões/inputs residem na mesma linha.
   - `cy.checkHeaderOcclusion()`: Garante que o cabeçalho fixo/móvel nunca cubra o título ou primeiro bloco de conteúdo.
 
-### 3. 📄 Currículo Profissional com Download Direto de Alta Fidelidade
+### 4. 📄 Currículo Profissional com Download Direto de Alta Fidelidade
 - Substituição de `iframe` bruto (que gera falhas visuais e caixas cinzas no mobile) por um cartão executivo moderno com metadados do documento (`PDF`, `Versão Atualizada`) e botão de download nativo (`#qa-curriculum-download`).
 
 ---
@@ -67,14 +73,14 @@
 │       └── trigger-e2e-on-portfolio.yml  # Template para disparo cruzado via repository_dispatch
 ├── cypress/
 │   ├── e2e/
-│   │   ├── 01-home-and-responsive.cy.js  # Elementos centrais, SEO, overflow zero e social links
-│   │   ├── 02-routes-and-navigation.cy.js# Validação de integridade de todas as rotas da SPA
-│   │   ├── 03-theme-and-language.cy.js   # UX/UI: Dark/Light Mode e Internacionalização (i18n)
-│   │   ├── 04-contact-form.cy.js         # Validação funcional de inputs obrigatórios
-│   │   ├── 05-qa-automation-lab.cy.js    # Login Demo, área protegida e catálogo do Laboratório
-│   │   ├── 06-visual-responsiveness-audit.cy.js # Matriz ultra-mobile, badges, labels e currículo
+│   │   ├── 01-home-and-responsive.cy.js  # Elementos centrais, SEO, overflow zero e social links (9 testes)
+│   │   ├── 02-routes-and-navigation.cy.js# Validação de integridade de todas as rotas da SPA (12 testes)
+│   │   ├── 03-theme-and-language.cy.js   # UX/UI: Dark/Light Mode e Internacionalização i18n (4 testes)
+│   │   ├── 04-contact-form.cy.js         # Validação funcional de inputs obrigatórios (4 testes)
+│   │   ├── 05-qa-automation-lab.cy.js    # Login Demo, área protegida e catálogo do Laboratório (6 testes)
+│   │   ├── 06-visual-responsiveness-audit.cy.js # Matriz 5 viewports, badges, labels e currículo (35 testes)
 │   │   ├── generated/
-│   │   │   └── autonomous-ai-suite.cy.js # Testes gerados de forma 100% autônoma pela IA
+│   │   │   └── autonomous-ai-suite.cy.js # Testes gerados de forma 100% autônoma pela IA (2 testes)
 │   │   └── all-tests.cy.js               # Suíte agregadora para execução visual contínua
 │   ├── reports/                          # Relatórios em JSON e HTML
 │   └── support/
@@ -93,17 +99,18 @@
 
 ---
 
-## 📊 Matriz de Cobertura E2E
+## 📊 Matriz de Cobertura E2E (72 Cenários — 100% Green)
 
-| Módulo de Teste | Escopo de Validação | Viewports Testadas | Status |
-| :--- | :--- | :--- | :---: |
-| **`01-home-and-responsive.cy.js`** | Elementos da Home, tags de SEO, links do GitHub e LinkedIn (HTTP 200/300) e integridade visual. | Desktop, iPhone X, Galaxy S20 | <kbd>✅ 9/9</kbd> |
-| **`02-routes-and-navigation.cy.js`** | Rotas da SPA: `/about`, `/portfolio`, `/curriculum`, `/contact`, `/api-docs` e `/automation`. | Desktop e Mobile | <kbd>✅ 12/12</kbd> |
-| **`03-theme-and-language.cy.js`** | Persistência de tema (`data-theme="dark/light"`) e de idioma (`pt-BR` / `en-US`). | Desktop e Mobile | <kbd>✅ 4/4</kbd> |
-| **`04-contact-form.cy.js`** | Inputs obrigatórios (`#name`, `#email`, `#message`), sanitização e preenchimento. | Desktop e Mobile | <kbd>✅ 4/4</kbd> |
-| **`05-qa-automation-lab.cy.js`** | Autenticação com credenciais dinâmicas, proteção de rota `/automation/loja` e busca no catálogo. | Desktop e Mobile | <kbd>✅ 6/6</kbd> |
-| **`06-visual-responsiveness-audit.cy.js`** | Auditoria ultra-mobile: colisão de cabeçalho, espaçamento de badges, download direto de PDF e overflow-x zero. | 320px, 360px, 375px, 390px, 768px | <kbd>✅ 15/15</kbd> |
-| **`generated/autonomous-ai-suite.cy.js`** | Testes dinâmicos gerados autonomamente pela IA (A11y, Performance, Chaos, OpenAPI). | Multi-device | <kbd>✅ Ativo</kbd> |
+| Módulo / Especificação | Escopo Técnico de Validação | Viewports Testadas | Cenários | Status |
+| :--- | :--- | :--- | :---: | :---: |
+| **`01-home-and-responsive.cy.js`** | Elementos da Home, tags de SEO, links externos (GitHub/LinkedIn HTTP 200) e integridade visual. | Desktop, iPhone X, Galaxy S20 | 9 | <kbd>✅ 9/9</kbd> |
+| **`02-routes-and-navigation.cy.js`** | Integridade de rotas SPA: `/about`, `/portfolio`, `/curriculum`, `/contact`, `/api-docs` e `/automation`. | Desktop e Mobile | 12 | <kbd>✅ 12/12</kbd> |
+| **`03-theme-and-language.cy.js`** | Persistência de tema (`data-theme="dark/light"`) e de idioma (`pt-BR` / `en-US`). | Desktop e Mobile | 4 | <kbd>✅ 4/4</kbd> |
+| **`04-contact-form.cy.js`** | Inputs obrigatórios (`#name`, `#email`, `#message`), sanitização e validação de submit. | Desktop e Mobile | 4 | <kbd>✅ 4/4</kbd> |
+| **`05-qa-automation-lab.cy.js`** | Autenticação com credenciais dinâmicas, proteção de rota `/automation/loja` e catálogo. | Desktop e Mobile | 6 | <kbd>✅ 6/6</kbd> |
+| **`06-visual-responsiveness-audit.cy.js`** | Auditoria ultra-mobile: colisão de cabeçalho, espaçamento de badges, download direto de PDF e overflow zero. | 320px, 360px, 375px, 390px, 768px | 35 | <kbd>✅ 35/35</kbd> |
+| **`generated/autonomous-ai-suite.cy.js`** | Testes autônomos gerados dinamicamente pela IA (A11y, Performance, Chaos, OpenAPI). | Multi-device | 2 | <kbd>✅ 2/2</kbd> |
+| **Total Consolidado** | **Cobertura End-to-End Completa (Desktop, Tablet e Ultra-Mobile)** | **320px → 1280px** | **72** | <kbd>🏆 72/72</kbd> |
 
 ---
 
@@ -146,13 +153,11 @@ npm run test:full
 ```bash
 node scripts/ai-test-observer.js
 ```
-*O relatório executivo em formato HTML é salvo em `cypress/reports/ai-report-latest.html` e despachado automaticamente por e-mail caso as variáveis SMTP estejam configuradas.*
+*O relatório executivo em formato HTML é salvo em `cypress/reports/ai-report-latest.html` e despachado automaticamente por e-mail com a tabela de suítes, changelog e botão de re-execução.*
 
 ---
 
 ## 🔒 Variáveis de Ambiente (CI/CD GitHub Actions)
-
-Para habilitar a IA generativa em nuvem e o envio de e-mails executivos:
 
 | Variável | Descrição |
 | :--- | :--- |

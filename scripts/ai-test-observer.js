@@ -35,6 +35,7 @@ function getEnvironmentData() {
   const repoName = process.env.GITHUB_REPOSITORY || "GalileoGuilherme/portfolio-qa-automation";
   const targetUrl = process.env.CYPRESS_BASE_URL || "https://portfolio-omega-six-18.vercel.app";
   const actionUrl = runId ? `https://github.com/${repoName}/actions/runs/${runId}` : `https://github.com/${repoName}/actions`;
+  const dispatchUrl = `https://github.com/${repoName}/actions/workflows/cypress.yml`;
   
   let shortHash = "N/A";
   let commitMsg = "Execução Autônoma de QA";
@@ -50,7 +51,7 @@ function getEnvironmentData() {
     console.warn("Aviso: Dados parciais do Git obtidos.");
   }
 
-  return { actor, shortHash, commitMsg, modifiedFiles, actionUrl, targetUrl };
+  return { actor, shortHash, commitMsg, modifiedFiles, actionUrl, targetUrl, dispatchUrl };
 }
 
 // 2. Extração de Mudanças em Testes (Novos Criados vs Modificados)
@@ -738,11 +739,14 @@ function buildEmailHtml(insightsText, metrics, env, api, testChanges) {
                 </tr>
               </table>
 
-              <!-- Ações Rápidas -->
-              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 12px;">
+              <!-- Ações Rápidas & Disparo de Re-execução -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 16px;">
                 <tr>
                   <td align="center">
-                    <a class="btn" href="${env.actionUrl}" style="display: inline-block; background-color: #0f172a; color: #ffffff; font-size: 13px; font-weight: 700; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin: 4px;">
+                    <a class="btn" href="${env.dispatchUrl}" style="display: inline-block; background-color: #059669; color: #ffffff; font-size: 13.5px; font-weight: 800; padding: 13px 26px; border-radius: 8px; text-decoration: none; margin: 4px; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35);">
+                      🔁 Disparar Nova Execução de Testes (Re-run E2E)
+                    </a>
+                    <a class="btn" href="${env.actionUrl}" style="display: inline-block; background-color: #0f172a; color: #ffffff; font-size: 13px; font-weight: 700; padding: 13px 24px; border-radius: 8px; text-decoration: none; margin: 4px; border: 1px solid #334155;">
                       🔍 Acessar Pipeline no GitHub Actions
                     </a>
                   </td>

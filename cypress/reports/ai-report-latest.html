@@ -108,7 +108,7 @@
                             </tr>
                             <tr>
                               <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">🔗 <strong>Commit:</strong></td>
-                              <td class="meta-item-right" align="right" style="font-size: 13px; font-weight: 600; color: #0284c7; padding-top: 6px;"><code>7658f0b</code> — feat(qa/autonomy): integrar criterios estritos de responsividade, suíte autônoma por IA e documentacao executiva</td>
+                              <td class="meta-item-right" align="right" style="font-size: 13px; font-weight: 600; color: #0284c7; padding-top: 6px;"><code>88ff96f</code> — feat(reporter): adicionar relatorio detalhado de suites executadas e changelog de testes criados/modificados</td>
                             </tr>
                             <tr>
                               <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">🌐 <strong>Target Web:</strong></td>
@@ -118,7 +118,7 @@
                               <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">⚙️ <strong>API Status:</strong></td>
                               <td class="meta-item-right" align="right" style="padding-top: 6px;">
                                 <span style="background-color: #ecfdf5; color: #059669; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px;">
-                                  HTTP 200 (661ms)
+                                  HTTP 200 (482ms)
                                 </span>
                               </td>
                             </tr>
@@ -243,7 +243,17 @@
                         
     <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
       <span style="background-color: #ecfdf5; color: #059669; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #a7f3d0;">NOVO</span>
-      <code>cypress/e2e/generated/autonomous-ai-suite.cy.js</code>
+      <code>cypress/e2e/generated/autonomous-ai-suite.cy.js — Suíte autônoma gerada dinamicamente por IA</code>
+    </li>
+  
+    <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
+      <span style="background-color: #ecfdf5; color: #059669; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #a7f3d0;">NOVO</span>
+      <code>cypress/support/commands.js (checkNoGluedTokens & checkZeroHorizontalOverflow) — Comandos estritos de layout</code>
+    </li>
+  
+    <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
+      <span style="background-color: #ecfdf5; color: #059669; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #a7f3d0;">NOVO</span>
+      <code>cypress/e2e/06-visual-responsiveness-audit.cy.js — Matriz de 5 viewports (320px a 768px)</code>
     </li>
   
                       </ul>
@@ -255,22 +265,12 @@
                         
     <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
       <span style="background-color: #f0f9ff; color: #0284c7; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #bae6fd;">MODIFICADO</span>
-      <code>cypress/e2e/06-visual-responsiveness-audit.cy.js</code>
-    </li>
-  
-    <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
-      <span style="background-color: #f0f9ff; color: #0284c7; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #bae6fd;">MODIFICADO</span>
-      <code>cypress/e2e/all-tests.cy.js</code>
+      <code>cypress/e2e/generated/autonomous-ai-suite.cy.js</code>
     </li>
   
     <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
       <span style="background-color: #f0f9ff; color: #0284c7; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #bae6fd;">MODIFICADO</span>
       <code>cypress/reports/ai-report-latest.html</code>
-    </li>
-  
-    <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
-      <span style="background-color: #f0f9ff; color: #0284c7; font-weight: 700; font-size: 11px; padding: 2px 6px; border-radius: 4px; margin-right: 6px; border: 1px solid #bae6fd;">MODIFICADO</span>
-      <code>cypress/support/commands.js</code>
     </li>
   
     <li style="margin-bottom: 6px; font-size: 13px; color: #0f172a; line-height: 1.5;">
@@ -295,18 +295,16 @@
                       
 <h3 style="margin: 22px 0 10px 0; color: #0f172a; font-size: 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">🏆 Todos os Cenários E2E Aprovados (100% Green)</h3>A aplicação atingiu estabilidade completa em todos os 72 cenários automatizados (Desktop, Tablet e Ultra-Mobile).
 
-#<h3 style="margin: 22px 0 10px 0; color: #0f172a; font-size: 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;"><p style="margin: 6px 0; font-size: 14px; line-height: 1.6;"><strong style="color: #0284c7;">1.</strong> 🚀 Sugestão Arquitetural Inovadora: Contrato de API & Validação de Esquema Swagger</h3>- Validar que a especificação OpenAPI (/public/swagger.json) retorne schemas compatíveis com as rotas do Laboratório.</p>- Testes autônomos gerados e integrados ao pipeline contínuo em <code style="background: #f1f5f9; color: #dc2626; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12.5px;">cypress/e2e/generated/</code>.
+#<h3 style="margin: 22px 0 10px 0; color: #0f172a; font-size: 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;"><p style="margin: 6px 0; font-size: 14px; line-height: 1.6;"><strong style="color: #0284c7;">1.</strong> 🚀 Sugestão Arquitetural Inovadora: Detecção de Strings Hardcoded & Internacionalização (i18n)</h3>- Escanear todos os nós textuais do portfólio no modo inglês para detectar resquícios em português sem tradução.</p>- Testes autônomos gerados e integrados ao pipeline contínuo em <code style="background: #f1f5f9; color: #dc2626; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12.5px;">cypress/e2e/generated/</code>.
 
 #<h3 style="margin: 22px 0 10px 0; color: #0f172a; font-size: 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;"><p style="margin: 6px 0; font-size: 14px; line-height: 1.6;"><strong style="color: #0284c7;">2.</strong> 🤖 Novo Custom Command Sugerido para o Cypress:</h3></p>        <div style="margin: 16px 0; border-radius: 8px; overflow: hidden; border: 1px solid #1e293b; background: #0f172a;">
           <div style="background: #1e293b; padding: 6px 14px; font-size: 11px; font-weight: 700; color: #94a3b8; letter-spacing: 0.5px; border-bottom: 1px solid #334155;">
             JAVASCRIPT
           </div>
           <pre style="margin: 0; padding: 14px; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 12.5px; line-height: 1.6; color: #e2e8f0; overflow-x: auto; white-space: pre-wrap; word-break: break-word;"><code>// cypress/support/commands.js
-Cypress.Commands.add('validateOpenApiContract', () => {
-  cy.request('/swagger.json').then((res) => {
-    expect(res.status).to.eq(200);
-    expect(res.body).to.have.property('openapi');
-    expect(res.body.paths).to.have.property('/api/v1/auth/login');
+Cypress.Commands.add('auditUntranslatedKeys', () => {
+  cy.get('body').invoke('text').then((text) => {
+    expect(text).not.to.match(/{{.*}}/);
   });
 });</code></pre>
         </div>
@@ -317,11 +315,14 @@ Cypress.Commands.add('validateOpenApiContract', () => {
                 </tr>
               </table>
 
-              <!-- Ações Rápidas -->
-              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 12px;">
+              <!-- Ações Rápidas & Disparo de Re-execução -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 16px;">
                 <tr>
                   <td align="center">
-                    <a class="btn" href="https://github.com/GalileoGuilherme/portfolio-qa-automation/actions" style="display: inline-block; background-color: #0f172a; color: #ffffff; font-size: 13px; font-weight: 700; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin: 4px;">
+                    <a class="btn" href="https://github.com/GalileoGuilherme/portfolio-qa-automation/actions/workflows/cypress.yml" style="display: inline-block; background-color: #059669; color: #ffffff; font-size: 13.5px; font-weight: 800; padding: 13px 26px; border-radius: 8px; text-decoration: none; margin: 4px; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35);">
+                      🔁 Disparar Nova Execução de Testes (Re-run E2E)
+                    </a>
+                    <a class="btn" href="https://github.com/GalileoGuilherme/portfolio-qa-automation/actions" style="display: inline-block; background-color: #0f172a; color: #ffffff; font-size: 13px; font-weight: 700; padding: 13px 24px; border-radius: 8px; text-decoration: none; margin: 4px; border: 1px solid #334155;">
                       🔍 Acessar Pipeline no GitHub Actions
                     </a>
                   </td>
