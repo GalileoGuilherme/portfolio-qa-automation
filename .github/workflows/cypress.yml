@@ -74,7 +74,7 @@ jobs:
           SMTP_HOST: ${{ secrets.SMTP_HOST || 'smtp.office365.com' }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
-          EMAIL_TO: ${{ secrets.EMAIL_TO || 'galileoguilherme@outlook.com' }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO || 'galileoguilhermeqa@gmail.com' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Upload AI HTML Report
