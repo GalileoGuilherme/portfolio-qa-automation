@@ -4,7 +4,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Relatório Executivo de QA & IA</title>
+  <title>Relatório Executivo de QA</title>
   <style type="text/css">
     body { margin: 0; padding: 0; background-color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
     table { border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
@@ -108,7 +108,7 @@
                             </tr>
                             <tr>
                               <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">🔗 <strong>Commit:</strong></td>
-                              <td class="meta-item-right" align="right" style="font-size: 13px; font-weight: 600; color: #0284c7; padding-top: 6px;"><code>80f0997</code> — Update ai-test-observer.js</td>
+                              <td class="meta-item-right" align="right" style="font-size: 13px; font-weight: 600; color: #0284c7; padding-top: 6px;"><code>29aa7f4</code> — fix(ai): adicionar descoberta dinamica de modelos gemini e atualizar para gemini-2.5-flash e gemini-1.5-flash</td>
                             </tr>
                             <tr>
                               <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">🌐 <strong>Target Web:</strong></td>
@@ -118,7 +118,7 @@
                               <td class="meta-item-left" style="font-size: 13px; color: #64748b; padding-top: 6px;">⚙️ <strong>API Status:</strong></td>
                               <td class="meta-item-right" align="right" style="padding-top: 6px;">
                                 <span style="background-color: #ecfdf5; color: #059669; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px;">
-                                  HTTP 200 (542ms)
+                                  HTTP 200 (470ms)
                                 </span>
                               </td>
                             </tr>
@@ -130,7 +130,7 @@
                 </tr>
               </table>
 
-              <!-- SEÇÃO: 📋 Relatório Detalhado das Suítes Executadas (Com indicação de Editado vs Estável) -->
+              <!-- SEÇÃO: 📋 Relatório Detalhado das Suítes Executadas (Com status real por suíte) -->
               <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 24px; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;">
                 <tr>
                   <td style="background-color: #0f172a; padding: 12px 18px; color: #ffffff;">
@@ -234,7 +234,7 @@
     <tr style="border-bottom: 1px solid #f1f5f9; background-color: #ffffff;">
       <td style="padding: 10px 12px; font-size: 12px; font-weight: 700; color: #0f172a; font-family: monospace;">
         generated/autonomous-ai-suite.cy.js
-        <span style="background-color: #f1f5f9; color: #64748b; font-size: 9.5px; font-weight: 600; padding: 2px 5px; border-radius: 4px; margin-left: 6px;">ESTÁVEL</span>
+        <span style="background-color: #f0fdf4; color: #16a34a; font-size: 9.5px; font-weight: 700; padding: 2px 5px; border-radius: 4px; border: 1px solid #bbf7d0; margin-left: 6px;">EDITADO</span>
       </td>
       <td style="padding: 10px 12px; font-size: 11.5px; color: #475569;" class="hide-mobile">Suíte Autônoma Dinâmica Gerada por IA (Resiliência & A11y)</td>
       <td align="center" style="padding: 10px 12px; font-size: 12.5px; font-weight: 700; color: #0284c7;">2</td>
@@ -261,7 +261,7 @@
         <div style="margin-bottom: 10px;">
           <strong style="font-size: 12.5px; color: #0284c7;">🛠️ Casos de Teste Modificados / Aprimorados:</strong>
           <ul style="margin: 4px 0 0 0; padding-left: 18px;">
-            <li style="font-size: 12.5px; color: #0f172a; margin-bottom: 4px;"><span style="background: #f0f9ff; color: #0284c7; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; margin-right: 4px; border: 1px solid #bae6fd;">MODIFICADO</span><code>scripts/ai-test-observer.js</code></li>
+            <li style="font-size: 12.5px; color: #0f172a; margin-bottom: 4px;"><span style="background: #f0f9ff; color: #0284c7; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; margin-right: 4px; border: 1px solid #bae6fd;">MODIFICADO</span><code>cypress/e2e/generated/autonomous-ai-suite.cy.js</code></li><li style="font-size: 12.5px; color: #0f172a; margin-bottom: 4px;"><span style="background: #f0f9ff; color: #0284c7; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; margin-right: 4px; border: 1px solid #bae6fd;">MODIFICADO</span><code>cypress/reports/ai-report-latest.html</code></li><li style="font-size: 12.5px; color: #0f172a; margin-bottom: 4px;"><span style="background: #f0f9ff; color: #0284c7; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; margin-right: 4px; border: 1px solid #bae6fd;">MODIFICADO</span><code>scripts/ai-test-observer.js</code></li>
           </ul>
         </div>
       
@@ -269,30 +269,34 @@
                 </tr>
               </table>
 
-              <!-- Card de Diagnóstico & Insights da IA -->
+              <!-- Card de Diagnóstico & Insights de Engenharia de Qualidade -->
               <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 28px;">
                 <tr>
                   <td style="background-color: #ffffff; border-left: 4px solid #059669; border-top: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; border-radius: 0 12px 12px 0; padding: 20px;">
                     <div style="font-size: 14.5px; font-weight: 800; color: #0f172a; margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between;">
-                      <span>🧠 DIAGNÓSTICO & PAIR PROGRAMMING IA</span>
+                      <span>🧠 DIAGNÓSTICO & PAIR PROGRAMMING QA</span>
                     </div>
                     <div style="font-size: 11.5px; font-weight: 600; color: #64748b; margin-bottom: 12px;">
-                      Motor Ativo: <span style="color: #0284c7;">Motor Analítico Local SDET (Rotação Dinâmica)</span>
+                      Motor: <span style="color: #0284c7;">Motor Analítico SDET (Local)</span> • Foco: <span style="color: #0284c7;">Tolerância a Erros & Monitoramento de Rotas</span>
                     </div>
                     <div style="font-size: 13.5px; color: #334155; line-height: 1.6;">
                       
-<h3 style="margin: 22px 0 10px 0; color: #0f172a; font-size: 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">🏆 Todos os Cenários E2E Aprovados (100% Green)</h3>A aplicação atingiu estabilidade completa em todos os 72 cenários automatizados (Desktop, Tablet e Ultra-Mobile).
+<h3 style="margin: 22px 0 10px 0; color: #0f172a; font-size: 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;">🏆 Todos os Cenários E2E Aprovados (100% Green)</h3>
+A aplicação atingiu estabilidade completa em todos os 72 cenários automatizados (Desktop, Tablet e Ultra-Mobile).
 
-#<h3 style="margin: 22px 0 10px 0; color: #0f172a; font-size: 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;"><p style="margin: 6px 0; font-size: 14px; line-height: 1.6;"><strong style="color: #0284c7;">1.</strong> 🚀 Sugestão Arquitetural Inovadora: Persistência de Sessão & Recuperação de Carrinho</h3>- Garantir que itens adicionados ao carrinho no laboratório continuem persistidos após recarga forçada da página.</p>- Testes autônomos gerados e integrados ao pipeline contínuo em <code style="background: #f1f5f9; color: #dc2626; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12.5px;">cypress/e2e/generated/autonomous-ai-suite.cy.js</code>.
+<h4 style="margin: 16px 0 8px 0; color: #0284c7; font-size: 14px; font-weight: 700;">1. 🚀 Sugestão de Melhoria para o Portfólio: Tolerância a Erros & Monitoramento de Rotas</h4>
+<p style="margin: 4px 0 4px 14px; font-size: 13.5px; line-height: 1.6; color: #334155;">• Monitorar chamadas para assegurar que nenhuma rota essencial retorne HTTP 404 ou 500.</p>
+<p style="margin: 4px 0 4px 14px; font-size: 13.5px; line-height: 1.6; color: #334155;">• Suíte de cobertura integrada ao pipeline contínuo em <code style="background: #f1f5f9; color: #dc2626; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 12.5px;">cypress/e2e/generated/autonomous-ai-suite.cy.js</code>.</p>
 
-#<h3 style="margin: 22px 0 10px 0; color: #0f172a; font-size: 16px; font-weight: 700; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;"><p style="margin: 6px 0; font-size: 14px; line-height: 1.6;"><strong style="color: #0284c7;">2.</strong> 🤖 Novo Custom Command Sugerido para o Cypress:</h3></p>        <div style="margin: 16px 0; border-radius: 8px; overflow: hidden; border: 1px solid #1e293b; background: #0f172a;">
+<h4 style="margin: 16px 0 8px 0; color: #0284c7; font-size: 14px; font-weight: 700;">2. 🤖 Novo Custom Command Sugerido para o Cypress:</h4>
+
+        <div style="margin: 16px 0; border-radius: 8px; overflow: hidden; border: 1px solid #1e293b; background: #0f172a;">
           <div style="background: #1e293b; padding: 6px 14px; font-size: 11px; font-weight: 700; color: #94a3b8; letter-spacing: 0.5px; border-bottom: 1px solid #334155;">
             JAVASCRIPT
           </div>
           <pre style="margin: 0; padding: 14px; font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 12.5px; line-height: 1.6; color: #e2e8f0; overflow-x: auto; white-space: pre-wrap; word-break: break-word;"><code>// cypress/support/commands.js
-Cypress.Commands.add('verifyCartPersistence', () => {
-  cy.reload();
-  cy.get('#qa-cart-badge').should('not.contain', '0');
+Cypress.Commands.add('auditRouteHealth', (routes = ['/', '/about', '/portfolio', '/curriculum', '/contact']) => {
+  routes.forEach(route => cy.request(route).its('status').should('be.oneOf', [200, 304]));
 });</code></pre>
         </div>
       
@@ -323,7 +327,7 @@ Cypress.Commands.add('verifyCartPersistence', () => {
           <tr>
             <td style="background-color: #f8fafc; padding: 20px 28px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b;">
               <p style="margin: 0 0 4px 0;">Disparado automaticamente pelo pipeline de CI/CD • Galileo Guilherme</p>
-              <p style="margin: 0; font-size: 11px; color: #94a3b8;">Cypress E2E • Google Gemini AI • GitHub Actions</p>
+              <p style="margin: 0; font-size: 11px; color: #94a3b8;">Cypress E2E • Motor Analítico SDET (Local) • GitHub Actions</p>
             </td>
           </tr>
 
