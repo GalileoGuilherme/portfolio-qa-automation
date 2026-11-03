@@ -449,8 +449,7 @@ ${selectedDomain.autonomousTest}
 
 // 8. Análise da IA Generativa com Rotação Dinâmica por Commit Hash
 async function generateDualModeAIInsights(metrics, envData, apiHealth) {
-  const apiKey = process.env.GEMINI_API_KEY;
-  
+  const apiKey = process.env.GEMINI_API_KEY?.trim();  
   // Cálculo de semente pseudo-aleatória dinâmica baseada no hash do commit e tempo
   const hashSeed = parseInt((envData.shortHash || "0").replace(/[^0-9a-f]/gi, "").slice(0, 4), 16) || 0;
   const timeSeed = Math.floor(Date.now() / 180000); // Muda a cada 3 minutos caso o hash seja o mesmo
@@ -556,7 +555,7 @@ ${currentDomain.cypressCode}
 
 // Helper da API Gemini
 async function callGeminiAPI(apiKey, promptText) {
-  const models = ["gemini-1.5-flash-latest", "gemini-1.5-pro-latest"];
+  const models = ["gemini-2.0-flash", "gemini-1.5-flash-002"];
   const postData = JSON.stringify({
     contents: [{ parts: [{ text: promptText }] }],
     generationConfig: {
@@ -571,7 +570,7 @@ async function callGeminiAPI(apiKey, promptText) {
       const text = await new Promise((resolve, reject) => {
         const options = {
           hostname: "generativelanguage.googleapis.com",
-          path: `/v1/models/${model}:generateContent?key=${apiKey}`,
+          path: `/v1beta/models/${model}:generateContent?key=${apiKey}`,
           method: "POST",
           headers: {
             "Content-Type": "application/json",
