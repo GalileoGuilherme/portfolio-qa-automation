@@ -556,7 +556,7 @@ ${currentDomain.cypressCode}
 
 // Helper da API Gemini
 async function callGeminiAPI(apiKey, promptText) {
-  const models = ["gemini-1.5-flash", "gemini-1.5-pro"];
+  const models = ["gemini-1.5-flash-latest", "gemini-1.5-pro-latest"];
   const postData = JSON.stringify({
     contents: [{ parts: [{ text: promptText }] }],
     generationConfig: {
@@ -571,7 +571,7 @@ async function callGeminiAPI(apiKey, promptText) {
       const text = await new Promise((resolve, reject) => {
         const options = {
           hostname: "generativelanguage.googleapis.com",
-          path: `/v1beta/models/${model}:generateContent?key=${apiKey}`,
+          path: `/v1/models/${model}:generateContent?key=${apiKey}`,
           method: "POST",
           headers: {
             "Content-Type": "application/json",
