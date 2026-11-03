@@ -553,9 +553,53 @@ ${currentDomain.cypressCode}
   `;
 }
 
+// Descoberta dinâmica de modelos compatíveis com generateContent
+async function getAvailableGeminiModels(apiKey) {
+  const fallbackModels = ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-2.5-pro", "gemini-1.5-pro"];
+  try {
+    const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+    const raw = await new Promise((resolve, reject) => {
+      https.get(listUrl, { timeout: 10000 }, (res) => {
+        let body = "";
+        res.on("data", (chunk) => (body += chunk));
+        res.on("end", () => {
+          if (res.statusCode >= 200 && res.statusCode < 300) {
+            resolve(body);
+          } else {
+            reject(new Error(`ListModels HTTP ${res.statusCode}`));
+          }
+        });
+      }).on("error", reject);
+    });
+
+    const parsed = JSON.parse(raw);
+    if (parsed.models && Array.isArray(parsed.models)) {
+      const viable = parsed.models
+        .filter((m) => m.supportedGenerationMethods?.includes("generateContent"))
+        .map((m) => m.name.replace(/^models\//, ""))
+        .filter((name) => name.startsWith("gemini"));
+
+      const preferred = ["gemini-2.5-flash", "gemini-1.5-flash", "gemini-2.5-pro", "gemini-1.5-pro"];
+      const sorted = [];
+      for (const pref of preferred) {
+        if (viable.includes(pref)) sorted.push(pref);
+      }
+      for (const v of viable) {
+        if (!sorted.includes(v)) sorted.push(v);
+      }
+      if (sorted.length > 0) return sorted;
+    }
+  } catch (err) {
+    console.warn("⚠️ Não foi possível listar modelos dinamicamente, usando fallback:", err.message);
+  }
+  return fallbackModels;
+}
+
 // Helper da API Gemini
 async function callGeminiAPI(apiKey, promptText) {
-  const models = ["gemini-2.0-flash", "gemini-1.5-flash-002"];
+  const models = await getAvailableGeminiModels(apiKey);
+  console.log(`🤖 Modelos Gemini candidatos: ${models.slice(0, 4).join(", ")}`);
+
   const postData = JSON.stringify({
     contents: [{ parts: [{ text: promptText }] }],
     generationConfig: {
