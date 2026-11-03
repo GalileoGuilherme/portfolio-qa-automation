@@ -5,11 +5,12 @@
 
 [![Cypress E2E Tests](https://github.com/GalileoGuilherme/portfolio-qa-automation/actions/workflows/cypress.yml/badge.svg)](https://github.com/GalileoGuilherme/portfolio-qa-automation/actions/workflows/cypress.yml)
 ![Cypress Version](https://img.shields.io/badge/cypress-v13.17.0-04C38C?style=flat&logo=cypress&logoColor=white)
-![Google Gemini](https://img.shields.io/badge/AI%20Engine-Google%20Gemini%201.5-8E75C4?style=flat&logo=google&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/AI%20Engine-Gemini%202.5%20Flash%20%2F%20Local%20SDET-8E75C4?style=flat&logo=google&logoColor=white)
 ![Node Version](https://img.shields.io/badge/node-%3E%3D20.0.0-339933?style=flat&logo=node.js&logoColor=white)
-![Autonomous QA](https://img.shields.io/badge/Autonomous%20QA-Self--Generating%20Suites-blueviolet?style=flat)
+![Autonomous QA](https://img.shields.io/badge/Autonomous%20QA-12%20Rotating%20Domains-blueviolet?style=flat)
 ![Cross-Device Matrix](https://img.shields.io/badge/viewports-320px%20%E2%86%92%201280px-blue?style=flat)
 ![E2E Scenarios](https://img.shields.io/badge/E2E%20Scenarios-72%20Cen%C3%A1rios-success?style=flat)
+![Silent Fallback](https://img.shields.io/badge/Reliability-Silent%20Contingency-059669?style=flat)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 <p align="center">
@@ -28,21 +29,32 @@
 
 ## 🌟 Destaques de Engenharia & Inovações
 
-### 1. 🤖 Engenharia de QA Autônoma com IA Generativa
+### 1. 🤖 Engenharia de QA Autônoma & Observabilidade Inteligente
 - **Geração Dinâmica de Suítes de Teste**: O motor `scripts/ai-test-observer.js` analisa as necessidades da aplicação e gera autonomamente novos casos de teste diretamente em `cypress/e2e/generated/autonomous-ai-suite.cy.js`.
-- **Auto-Deploy & Execução Sem Bloqueio Humano**: A IA atua com autoridade de Tech Lead/Senior SDET, versionando e acionando pipelines de validação contínua sem necessidade de intervenção manual.
-- **Rotação Inteligente de 6 Domínios Especializados**: Elimina respostas repetitivas alternando dinamicamente entre:
-  1. *Resiliência de Rede & Chaos Engineering* (`cy.intercept` com injeção de latência e falhas 500)
+- **Isolamento de Telemetria & Contingência Silenciosa (Silent Fallback)**:
+  - O e-mail foca **100% na aplicação web sob teste** (Home, Rotas, Currículo, Contato, Swagger e Laboratório).
+  - Erros internos de infraestrutura ou IA (como depreciação de modelo, limites de API do Gemini ou timeouts) **nunca vazam para o relatório executivo**.
+  - Em caso de falha externa de rede/API, o observador aciona silenciosamente o **Motor Analítico Local de SDET**, garantindo entrega limpa e sem ruídos.
+  - O e-mail reporta de forma elegante e transparente apenas o motor ativo (ex: `Motor: Google Gemini (gemini-2.5-flash)` ou `Motor: Motor Analítico SDET (Local)`) e o domínio sob análise.
+- **Rotação Dinâmica em 12 Domínios Especializados de SDET (Zero Repetição)**:
+  1. *Resiliência de Rede & Chaos Engineering* (`cy.intercept` com injeção de latência e falhas 500 simuladas)
   2. *Acessibilidade Profunda WCAG 2.2* (auditoria de Focus Trap e navegação por teclado)
-  3. *Telemetria de Performance & Resource Timing* (Navigation Timing API e tarefas longas no DOM)
-  4. *Contratos de API & OpenAPI/Swagger* (validação de schemas JSON de autenticação)
-  5. *Auditoria de Internacionalização (i18n)* (varredura de nós textuais contra vazamento de template keys)
-  6. *Transição de Tema & Estabilidade Visual* (eliminação de FOUC e colisão de bounding boxes)
+  3. *Telemetria de Performance & Resource Timing* (Navigation Timing API e DOM Interactive)
+  4. *Contratos de API & OpenAPI/Swagger* (validação de schemas JSON contra `/swagger.json`)
+  5. *Detecção de Strings Hardcoded & i18n* (varredura de nós textuais contra vazamento de chaves)
+  6. *Auditoria Visual de Microinterações & Transição de Tema* (eliminação de FOUC)
+  7. *Segurança de Formulários & Sanitização contra XSS* (auditoria de scripts no DOM)
+  8. *Persistência de Sessão & Autenticação Demo* (fluxo de credenciais e proteção de rotas)
+  9. *Auditoria de Cabeçalhos HTTP de Segurança* (validação de `Strict-Transport-Security` / HSTS)
+  10. *Resiliência de Busca no Catálogo & Debounce* (filtragem rápida e ausência de bloqueios)
+  11. *Acessibilidade Touch & Áreas Mínimas de Toque (48x48px)* (ergonomia em resoluções mobile)
+  12. *Tolerância a Erros & Monitoramento de Rotas* (garantia de HTTP 200/304 em rotas essenciais)
 
 ### 2. 📧 Relatório Executivo com Ações Rápidas (1-Click Re-run)
-- **Tabela com Detalhamento das Suítes Executadas**: Lista cada arquivo de teste, seu escopo técnico, quantidade exata de cenários e status de validação (`✅ PASS`).
-- **Changelog de Testes (Criados vs Modificados)**: Extrai automaticamente do Git e exibe badges destacando novos casos criados e arquivos de teste aprimorados.
-- **Botão Direto de Re-execução**: Botão `🔁 Disparar Nova Execução de Testes (Re-run E2E)` posicionado no final do e-mail que direciona para o trigger `workflow_dispatch` do GitHub Actions, permitindo rodar novamente a suíte completa com 1 clique de qualquer cliente de e-mail (Outlook, Gmail ou mobile).
+- **Status Individual e Fidedigno por Suíte**: A tabela cruza individualmente as evidências de falha com cada arquivo de especificação. Se 6 suítes passarem e 1 falhar, as 6 aprovadas mantêm seu selo verde (`✅ PASS`), eliminando alarmes falsos generalizados.
+- **Deduplicação de Retries de Teste**: Trata screenshots de tentativas sucessivas (`attempt 2`, `attempt 3`) para que a contagem reflita os cenários reais falhados, sem inflar o placar.
+- **Changelog Git Real (Criados vs Modificados)**: Extrai as modificações reais do commit atual e destaca arquivos tocados vs estáveis.
+- **Botão Direto de Re-execução (1-Click Re-run)**: Botão `🔁 Disparar Nova Execução de Testes (Re-run E2E)` posicionado no final do e-mail com link direto para o `workflow_dispatch` do GitHub Actions, permitindo rodar novamente a suíte completa de qualquer cliente de e-mail (Outlook, Gmail ou mobile).
 
 ### 3. 📱 Critérios Estritos de Aceitação & Responsividade Ultra-Mobile
 - **Matriz de Resoluções Testadas**:
@@ -160,7 +172,7 @@ node scripts/ai-test-observer.js
 
 | Variável | Descrição |
 | :--- | :--- |
-| `GEMINI_API_KEY` | Chave de API do Google Gemini (`gemini-1.5-flash` / `gemini-1.5-pro`) |
+| `GEMINI_API_KEY` | Chave de API do Google Gemini (`gemini-2.5-flash`, `gemini-1.5-flash` com descoberta dinâmica) |
 | `SMTP_USER` | Conta de disparo SMTP (Gmail / Outlook) |
 | `SMTP_PASS` | Senha de aplicativo / credencial SMTP |
 | `EMAIL_TO` | Destinatário dos relatórios executivos |
